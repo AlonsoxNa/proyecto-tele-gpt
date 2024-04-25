@@ -1,0 +1,75 @@
+.custom-table {
+  border-collapse: collapse;
+}
+
+.custom-table th, .custom-table td {
+  border: none;
+  padding: 0.3rem;
+}
+
+.custom-table th {
+  color: #0F2357 ;
+  font-weight: bold; /* Opcional: para hacer el texto del encabezado en negrita */
+}
+
+.primero{
+    background-color: #0F2357;
+    color: white;
+    height: 3rem;
+    border-radius: 0.3rem;
+}
+
+.demas{
+    background-color: #DBE3E3;
+    border-radius: 0.3rem;
+    
+    height: 3rem;
+}
+
+
+.color-btn{
+  background-color: #0F2357 !important;
+  color: white !important;
+  margin-top: 0.5rem;
+  width: 6rem; /* Ancho del botón */
+  height: 3rem;
+  font-size: 1rem;
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  text-align: center; 
+  border-color:#0F2357 !important;
+}
+
+.linea{
+  background-color: #0F2357;
+  height: 0.2rem;
+}
+
+.letra{
+  color: #1ECCCC;
+}
+
+.margen{
+  margin-top: 1rem;
+}
+
+.muestradatos{
+  background-color: #DBE3E3 ;
+  width: 3rem;
+  height: 2rem;
+}
+
+
+
+.tam-2{
+  width: 8rem; /* Ancho del botón */
+  height: 3rem;
+}
+
+.color-btn:hover{
+  background-color: #09183d !important;
+  color: white !important;
+  border-color:#09183d !important;
+}
+
+
