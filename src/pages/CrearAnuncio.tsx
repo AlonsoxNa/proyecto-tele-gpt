@@ -1,5 +1,8 @@
+import MediaUpload from "../Componentes/MediaUpload";
 export const CrearAnuncio = () => {
-  return (
-    <div>CrearAnuncio</div>
-  )
-}
+    return (
+        <>
+            <MediaUpload />
+        </>
+    );
+};
