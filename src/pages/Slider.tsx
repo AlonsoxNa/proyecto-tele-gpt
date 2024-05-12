@@ -1,5 +1,9 @@
+import { Carrusel } from '../components/slider/Carrusel';
+
 export const Slider = () => {
   return (
-    <div>Slider</div>
-  )
-}
+    <>
+      <Carrusel />
+    </>
+  );
+};
