@@ -23,17 +23,15 @@
   top: 50%;
   left: 18vw;
   max-width: 30vw;
-  background-color: #ebebeb14;
   transform: translate(-50%, -50%);
-  border-radius: 10px;
-  color: white; /* Color del texto */
+  color: #000; /* Color del texto */
   z-index: 4; /* Asegura que el contenido esté encima del fondo */
 }
 
 .titulo-publicacion{
   font-size: 6vh;
   font-family: "Roboto", sans-serif;
-  font-weight: 500;
+  font-weight: 800;
   font-style: normal;
 }
 
