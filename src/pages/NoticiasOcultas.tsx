@@ -6,7 +6,6 @@ import TablaSimplev2 from "../Componentes/Tablasimple/TablaSimplev2"
 
 const NoticiasOcultas = () => {
 
-    const Tablatitulos = ['Noticias', 'Fecha', '', '','']
 
     const datosResultadospostula = [
       {
@@ -142,11 +141,11 @@ const NoticiasOcultas = () => {
 
   return (
     <>
-    <Navbar/>
+      <Navbar nombreUsuario="Anónimo"/>
 
       <div className="container">
       
-      <TablaSimplev2 rows={datosResultadospostula} titulos={Tablatitulos}/>
+      <TablaSimplev2 rows={datosResultadospostula}/>
 
       
       </div>

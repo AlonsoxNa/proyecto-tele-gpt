@@ -6,7 +6,7 @@ import { SelecctorFechas } from "@/Componentes/SelecctorFechas";
 export const CrearAnuncio = () => {
     return (
         <>
-            <Navbar />
+            <Navbar nombreUsuario="Anonimo" />
             <div className="container mt-4">
                 <div className="row">
                     <div className="col-md-6">
@@ -16,7 +16,7 @@ export const CrearAnuncio = () => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="titulo2" className="form-label">Ingresa contenido de la noticia</label>
-                            <textarea id="descripcion" className="form-control" rows="8"></textarea>
+                            <textarea id="descripcion" className="form-control" rows={8}></textarea>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="titulo3" className="form-label">Ingresa categoria</label>
@@ -26,11 +26,11 @@ export const CrearAnuncio = () => {
                     <div className="col-md-6">
                         <div className="mb-3">
                             <label htmlFor="fecha" className="form-label">Elige la fecha de la noticia</label>
-                            <SelecctorFechas id="fecha" />
+                            <SelecctorFechas />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="mediaUpload" className="form-label">Sube foto o video de la noticia</label>
-                            <MediaUpload id="mediaUpload" />
+                            <MediaUpload />
                         </div>
                     </div>
                 </div>
