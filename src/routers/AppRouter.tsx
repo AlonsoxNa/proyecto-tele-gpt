@@ -6,20 +6,21 @@ import { Slider } from '../pages/Slider';
 import NoticiasOcultas from "../pages/NoticiasOcultas";
 
 export const router = createBrowserRouter( [
-  {
+  /*{
     path: "/",
     element: <Login />,
   },
+  */
   {
     path: "/crear-anuncio",
     element: <CrearAnuncio />,
   },
   {
-    path: "/dashboard",
+    path: "/admin",
     element: <Dashboard />,
   },
   {
-    path: '/slider',
+    path: '/',
     element: <Slider />
   },
   {
