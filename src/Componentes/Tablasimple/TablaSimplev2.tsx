@@ -1,37 +1,56 @@
-import React from 'react';
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody} from '@mui/material';
 import './TablaSimplev2.css'; // Importa tu archivo CSS personalizado
 
 
-export default function TablaSimplev2({ rows, titulos }) {
+
+interface Rows{
+  id:number;
+  Noticia: string;
+  Fecha: string;
+}
+
+interface TableSimplev2{
+  rows:Rows[];
+}
+
+export default function TablaSimplev2({ rows}:TableSimplev2) {
   return (
     <TableContainer>
       <Table className="custom-table">
         <TableHead>
           <TableRow>
-            {titulos.map((titulo) => (
-              <TableCell key={titulo}>
-                {titulo !== '' ? (
-                  <>
-                    {titulo}
-                    <div className='linea'></div>
-                  </>
-                ) : (
-                  <>
-                    {titulo}
-                  </>
-                )}
+              <TableCell>
+                Noticia
               </TableCell>
-            ))}
+              <TableCell>
+                Fecha
+              </TableCell>
+              <TableCell>
+                Acciones
+              </TableCell>
           </TableRow>
         </TableHead>
 
         <TableBody>
-          {rows.map((row) => {
-            let isFirstCell = true; // Variable para rastrear el primer elemento
-            return (
+          {rows.map((row) => (
               <TableRow key={row.id}>
-                {Object.keys(row).map((key) => {
+                    <TableCell className=''>
+                      <div className='primero container justify-content-center align-items-center d-flex'>
+                      {row.Noticia}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className='d-flex  demas container justify-content-center align-items-center'>
+                      {row.Fecha}
+                      </div>
+                    </TableCell>
+                    <TableCell className=''>
+                      <button className='btn color-btn'>Eliminar</button>
+                      <button className='btn color-btn'>Ocultar</button>
+                      <button className='btn color-btn'>Modificar</button>
+                    </TableCell>
+                
+                {/* {Object.keys(row).map((key) => {
                   if (key === 'id') return null;
                   if (key.startsWith('Boton')) {
                     return (
@@ -54,10 +73,9 @@ export default function TablaSimplev2({ rows, titulos }) {
                       <div className={cellClass}>{row[key]}</div>
                     </TableCell>
                   );
-                })}
+                })} */}
               </TableRow>
-            );
-          })}
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
