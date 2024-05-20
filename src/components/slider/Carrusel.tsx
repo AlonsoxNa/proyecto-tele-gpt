@@ -39,11 +39,6 @@ export const Carrusel = () => {
   const buttonItemNext = useRef<HTMLButtonElement>(null);
 
   useEffect(()=>{
-    // const timer = setTimeout(() => {
-    //     if (buttonItemNext.current) {
-    //       buttonItemNext.current.click();
-    //     }
-    //   }, 9000);
     const timer = () => {
       return setTimeout(() => {
         if (buttonItemNext.current) {
