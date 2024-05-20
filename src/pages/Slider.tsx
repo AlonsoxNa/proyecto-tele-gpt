@@ -1,5 +1,12 @@
+import { Carrusel } from '../components/slider/Carrusel';
+import {NavbarInicio} from '../components/slider/NavbarInicio';
+
 export const Slider = () => {
   return (
-    <div>Slider</div>
-  )
-}
+    <div className="container-slider h-full">
+      <NavbarInicio />
+      <Carrusel />
+      {/* <Carrusel2  slides={slides}/> */}
+    </div>
+  );
+};

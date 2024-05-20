@@ -1,0 +1,66 @@
+/* Estilo general del formulario */
+.form-container {
+    max-width: 90%; /* Ancho máximo relativo al contenedor padre */
+    margin: 2rem auto; /* Centrado con un margen superior e inferior */
+    padding: 2%; /* Padding relativo al ancho del contenedor */
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem; /* Bordes redondeados */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Área para arrastrar y soltar */
+.drop-area {
+    padding: 2rem;
+    border: 2px dashed #007bff;
+    border-radius: 0.5rem;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Efectos cuando se arrastran archivos sobre el área */
+.drop-area:hover,
+.drop-area:active {
+    background-color: #e9f5ff;
+    border-color: #0056b3;
+}
+
+button {
+    width: 100%; /* Aprovechar todo el ancho disponible */
+    padding: 1rem; /* Padding uniforme */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo para la vista previa de la imagen y el vídeo */
+.preview-img,
+video {
+    width: 35%; /* Ancho completo para adaptarse al contenedor */
+    height: auto; /* Altura automática para mantener la proporción */
+    border-radius: 0.4rem; /* Bordes redondeados */
+    margin-bottom: 1rem; /* Margen para separar de otros elementos */
+    /* para centrar */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Estilo del texto alternativo en la vista previa */
+.preview-img[alt="Preview"] {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9rem; /* Tamaño de fuente relativo */
+    color: #6c757d;
+}
