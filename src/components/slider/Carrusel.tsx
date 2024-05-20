@@ -1,9 +1,7 @@
 import Image1 from '@/assets/publicacion2.jpg';
 import Image2 from '@/assets/publicacion3.jpg';
-import Image3 from '@/assets/slider-03.webp';
 import { useEffect,useRef } from 'react';
 import Video1 from '@/assets/publicacion1.mp4';
-import { CarruselItem } from './CarruselItem';
 import "./Carrusel.css"
 
 const itemSlider = [
@@ -41,11 +39,21 @@ export const Carrusel = () => {
   const buttonItemNext = useRef<HTMLButtonElement>(null);
 
   useEffect(()=>{
-    const timer = setTimeout(() => {
-      if (buttonItemNext.current) {
-        buttonItemNext.current.click();
-      }
-    }, 9000);
+    // const timer = setTimeout(() => {
+    //     if (buttonItemNext.current) {
+    //       buttonItemNext.current.click();
+    //     }
+    //   }, 9000);
+    const timer = () => {
+      return setTimeout(() => {
+        if (buttonItemNext.current) {
+          buttonItemNext.current.click();
+        }
+      }, 9000);
+    };
+
+    // Iniciar el temporizador cuando el componente se monte
+      timer();
   },[])
 
   return (

@@ -2,7 +2,12 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './Navbar.css'
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ children, nombreUsuario = 'Anonimo' }) => {
+interface Navbar{
+  nombreUsuario:string;
+}
+
+
+const Navbar = ({ nombreUsuario = 'Anonimo' }:Navbar ) => {
 
     return (
         <div style={{ marginBottom: '2rem' }}>
@@ -26,19 +31,19 @@ const Navbar = ({ children, nombreUsuario = 'Anonimo' }) => {
 
                 
 
-                <div className='navbar-nav'>{children}</div>
+                {/* <div className='navbar-nav'>{children}</div> */}
                 <div className='container'>
                     <div className='row'>
                         <div className='col-2'>
-                        <Link className='navtext' to={'/dashboard'}>Noticias Mostradas</Link>
+                        <Link className='navtext' to={'/admin'}>Noticias Mostradas</Link>
                         </div>
 
                         <div className='col-2'>
-                        <Link className='navtext' to={'/NoticiasOcultas'}>Noticias arhivadas</Link>
+                        <Link className='navtext' to={'/NoticiasOcultas'}>Noticias archivadas</Link>
                         </div>
 
                         <div className='col-2'>
-                        <Link className='navtext' to={''}>Crear noticias</Link>
+                        <Link className='navtext' to={'/crear-anuncio'}>Crear noticias</Link>
                         </div>
                         
 
