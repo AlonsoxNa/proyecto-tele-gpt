@@ -1,16 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
-// import { Login } from '../pages/Login';
+import { HomeTemporal } from '../pages/HomeTemporal';
 import { CrearAnuncio } from '../pages/CrearAnuncio';
 import { Dashboard } from '../pages/Dashboard';
 import { Slider } from '../pages/Slider';
 import NoticiasOcultas from "../pages/NoticiasOcultas";
+import { Login } from '@/pages/Login';
 
 export const router = createBrowserRouter( [
-  /*{
-    path: "/",
-    element: <Login />,
+  {
+    path: "/home",
+    element: <HomeTemporal />,
   },
-  */
+
+  {
+    path: "/login",
+    element: <Login />
+  },
+
   {
     path: "/crear-anuncio",
     element: <CrearAnuncio />,
@@ -25,6 +31,6 @@ export const router = createBrowserRouter( [
   },
   {
     path: '/NoticiasOcultas',
-    element: <NoticiasOcultas/>
+    element: <NoticiasOcultas />
   }
 ] );
