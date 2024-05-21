@@ -1,9 +1,8 @@
 import MediaUpload from "../Componentes/MediaUpload";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Navbar from "@/Componentes/Navbar";
-import { SelecctorFechas } from "@/Componentes/SelecctorFechas";
 
-export const CrearAnuncio = () => {
+export const Solotexto = () => {
     return (
         <>
             <Navbar />
@@ -11,26 +10,18 @@ export const CrearAnuncio = () => {
                 <div className="row">
                     <div className="col-md-6">
                         <div className="mb-3">
-                            <label htmlFor="titulo1" className="form-label">Ingresa título de la noticia</label>
+                            <label htmlFor="titulo1" className="form-label">Ingresa título de la publicación</label>
                             <input type="text" id="titulo1" className="form-control" />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="titulo2" className="form-label">Ingresa contenido de la noticia</label>
+                            <label htmlFor="titulo2" className="form-label">Ingresa contenido de la publicación</label>
                             <textarea id="descripcion" className="form-control" rows="8"></textarea>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="titulo3" className="form-label">Ingresa categoria</label>
-                            <input type="text" id="titulo3" className="form-control" />
                         </div>
                     </div>
                     <div className="col-md-6">
                         <div className="mb-3">
-                            <label htmlFor="fecha" className="form-label">Elige la fecha de la noticia</label>
+                            <label htmlFor="fecha" className="form-label">Elige la fecha de la publicación</label>
                             <SelecctorFechas id="fecha" />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="mediaUpload" className="form-label">Sube foto o video de la noticia</label>
-                            <MediaUpload id="mediaUpload" />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="duracion" className="form-label">Duración en pantalla (segundos)</label>
