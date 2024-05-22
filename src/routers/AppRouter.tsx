@@ -11,12 +11,10 @@ export const router = createBrowserRouter( [
     path: "/home",
     element: <HomeTemporal />,
   },
-
   {
     path: "/login",
     element: <Login />
   },
-
   {
     path: "/crear-anuncio",
     element: <CrearAnuncio />,
@@ -26,11 +24,15 @@ export const router = createBrowserRouter( [
     element: <Dashboard />,
   },
   {
-    path: '/',
+    path: '/slider',
     element: <Slider />
   },
   {
     path: '/NoticiasOcultas',
     element: <NoticiasOcultas />
-  }
+  },
+  {
+    path: "/*",
+    element: <Login />,
+  },
 ] );
