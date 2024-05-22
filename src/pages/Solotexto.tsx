@@ -1,7 +1,7 @@
 import MediaUpload from "../Componentes/MediaUpload";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Navbar from "@/Componentes/Navbar";
-
+import { SelecctorFechas } from "@/Componentes/SelecctorFechas";
 export const Solotexto = () => {
     return (
         <>
