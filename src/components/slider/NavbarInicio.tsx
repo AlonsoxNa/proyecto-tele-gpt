@@ -66,19 +66,20 @@ export const NavbarInicio = () => {
         const query = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=ca91f278180de2526c359dbcb495dd24&&units=metric&lang=sp`)
         const objeto = {coord:query.data.coord,main:query.data.main,wind:query.data.wind,weather:query.data.weather,name:query.data.name,timezone:query.data.timezone}
         setDatos(objeto)
+        console.log("se hace la consulta")
     }
-    consulta()
-    useEffect(()=>{
-        const timer = () => {
-          return setTimeout(() => {
-            consulta()
-            console.log("se hizo la consulta")
-          }, 3600000);
-        };
+    // consulta()
+    // useEffect(()=>{
+    //     const timer = () => {
+    //       return setTimeout(() => {
+    //         consulta()
+    //         console.log("se hizo la consulta")
+    //       }, 9000);
+    //     };
     
-        // Iniciar el temporizador cuando el componente se monte
-        timer();
-    },[])
+    //     // Iniciar el temporizador cuando el componente se monte
+    //     timer();
+    // },[])
     
     return(
         <div className="navbari container">
