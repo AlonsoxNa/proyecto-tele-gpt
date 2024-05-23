@@ -1,12 +1,11 @@
 import { useForm } from '@/hooks/useForm';
-import { LoginFormData } from '@/interfaces/Login';
+import { LoginFormData, responseAuth } from '@/interfaces/Login';
 import { useUserStore } from '@/stores/user.store';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Backdrop, Button, CircularProgress, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { FC, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-
+import { login } from '@/services/authServices';
 
 export const LoginForm: FC = () => {
 
@@ -34,8 +33,13 @@ export const LoginForm: FC = () => {
 
     const errors = await handleValidateAll();
     if ( errors.length === 0 ) {
-      handleLogin( form.email, form.email, 'soy un token' );
-      navigate( '/home' );
+      const response: responseAuth = await login( form.email, form.password ) as responseAuth; // Explicitly type the response variable as responseAuth
+
+      if ( response.status === 200 ) {
+        handleLogin( form.email, form.email, response.data );
+        setIsLoading( false );
+        navigate( '/home' );
+      }
     }
     setIsLoading( false );
   };
