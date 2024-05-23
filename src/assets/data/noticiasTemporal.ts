@@ -1,20 +1,20 @@
 export const noticias = [
   {
     id: 1,
-    titulo: 'Papu tienes una videollamada',
-    fechaRegistro: Date.now().toString(),
+    titulo: 'Facilito warwick',
+    fechaRegistro: new Date().getDate() + '-' + ( new Date().getMonth() + 1 ) + '-' + new Date().getFullYear(),
     habilitado: true
   },
   {
     id: 2,
     titulo: 'Mujeres bellas abriguense',
-    fechaRegistro: Date.now().toString(),
+    fechaRegistro: new Date().getDate() + '-' + ( new Date().getMonth() + 1 ) + '-' + new Date().getFullYear(),
     habilitado: true
   },
   {
     id: 3,
-    titulo: 'Tu madre tiene una "sorpresa"',
-    fechaRegistro: Date.now().toString(),
+    titulo: 'Mujeres bellas abriguense',
+    fechaRegistro: new Date().getDate() + '-' + ( new Date().getMonth() + 1 ) + '-' + new Date().getFullYear(),
     habilitado: false
   }
 ];

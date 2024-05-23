@@ -1,4 +1,6 @@
 import { useFiltroSearchStore } from '@/stores/noticias/filtroSearch.store';
+import { useSelectNoticias } from '@/stores/noticias/selectNoticias.store';
+import { AddCircle } from '@mui/icons-material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import SearchIcon from '@mui/icons-material/Search';
@@ -8,6 +10,7 @@ import { ChangeEvent, FC } from 'react';
 export const FiltrosNoticias: FC = () => {
 
   const { handleChangeFiltroSearch, handleChangeFiltroStatus, filtroSearch, filtroStatus } = useFiltroSearchStore();
+  const { noticiasSelected } = useSelectNoticias();
 
   const handleChangeStatusNoticia = ( { target }: SelectChangeEvent ) => {
     const { value } = target;
@@ -31,7 +34,7 @@ export const FiltrosNoticias: FC = () => {
       <Grid
         item
         xs={ 12 }
-        md={ 4 }
+        md={ 3 }
       >
         <TextField
           variant="outlined"
@@ -45,9 +48,9 @@ export const FiltrosNoticias: FC = () => {
           onChange={ handleChangeSearch }
         />
       </Grid>
-      <Grid item xs={ 12 } md={ 4 } sx={ { display: 'flex', flexDirection: 'row', alignItems: 'center' } } gap={ 1 }>
+      <Grid item xs={ 12 } md={ 3 } sx={ { display: 'flex', flexDirection: 'row', alignItems: 'center' } } gap={ 1 }>
         <FilterAltIcon />
-        <FormControl sx={ { minWidth: '40%' } }>
+        <FormControl sx={ { minWidth: '60%' } }>
 
           <InputLabel id="demo-simple-select-label">Estado</InputLabel>
           <Select
@@ -63,15 +66,24 @@ export const FiltrosNoticias: FC = () => {
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={ 12 } md={ 4 } sx={ { display: 'flex', flexDirection: 'row', alignItems: 'center' } }>
+      <Grid item xs={ 12 } md={ 6 } sx={ { display: 'flex', flexDirection: 'row', alignItems: 'center' } } gap={ 1 }>
         <Button
           variant="contained"
-          color="primary"
-          disabled
+          color="error"
+          disabled={ noticiasSelected.length === 0 }
           sx={ { width: 'auto' } }
           startIcon={ <RemoveCircleIcon /> }
         >
           Ocultar seleccionadas
+        </Button>
+        <Button
+          variant="contained"
+          color="success"
+          disabled={ noticiasSelected.length === 0 }
+          sx={ { width: 'auto' } }
+          startIcon={ <AddCircle /> }
+        >
+          Mostrar seleccionadas
         </Button>
       </Grid>
     </Grid>
