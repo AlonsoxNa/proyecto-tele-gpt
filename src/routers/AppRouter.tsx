@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import { HomeTemporal } from '../pages/HomeTemporal';
 import { CrearAnuncio } from '../pages/CrearAnuncio';
-import { Dashboard } from '../pages/Dashboard';
+import { Noticias } from '../pages/Noticias';
 import { Slider } from '../pages/Slider';
 import NoticiasOcultas from "../pages/NoticiasOcultas";
 import { Login } from '@/pages/Login';
+import { Layout } from '@/components/layout/Layout';
 
 export const router = createBrowserRouter( [
   {
@@ -20,8 +21,14 @@ export const router = createBrowserRouter( [
     element: <CrearAnuncio />,
   },
   {
-    path: "/admin",
-    element: <Dashboard />,
+    path: "/admin/",
+    element: <Layout />,
+    children: [
+      {
+        path: "noticias",
+        element: <Noticias />,
+      },
+    ]
   },
   {
     path: '/slider',
