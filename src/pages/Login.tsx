@@ -1,4 +1,4 @@
-import { LoginForm } from '@/components/login/LoginForm';
+import { LoginFormData } from '@/components/login/LoginForm';
 import { Grid, Typography } from '@mui/material';
 
 

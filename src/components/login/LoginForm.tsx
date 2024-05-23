@@ -1,21 +1,19 @@
 import { useForm } from '@/hooks/useForm';
+import { LoginFormData } from '@/interfaces/Login';
 import { useUserStore } from '@/stores/user.store';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Backdrop, Button, CircularProgress, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { FC, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-interface FormData {
-  email: string;
-  password: string;
-}
+
 
 export const LoginForm: FC = () => {
 
   const navigate = useNavigate();
   const { handleLogin } = useUserStore();
 
-  const { form, errors, handleChange, handleValidateAll, handleValidate } = useForm<FormData>( {
+  const { form, errors, handleChange, handleValidateAll, handleValidate } = useForm<LoginFormData>( {
     email: '',
     password: ''
   } );

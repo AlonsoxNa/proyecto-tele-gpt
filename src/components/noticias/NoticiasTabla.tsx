@@ -1,11 +1,9 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Grid, Button } from '@mui/material';
 // import './TablaSimplev2.css'; // Importa tu archivo CSS personalizado
-
-interface Noticia {
-  id: number;
-  titulo: string;
-  fechaRegistro: string;
-}
+import DeleteIcon from '@mui/icons-material/Delete';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { Noticia } from '@/interfaces/Noticia';
 
 interface Props {
   noticias: Noticia[];
@@ -36,9 +34,8 @@ export const NoticiasTabla = ( { noticias }: Props ) => {
               <TableCell >
                 <Grid
                   container
-                  justifyContent='center'
                   alignItems='center'
-                  sx={ { backgroundColor: '#0F2357', color: 'white', height: '3rem', borderRadius: '0.3rem' } }
+                  sx={ { backgroundColor: '#DBE3E3', height: '3rem', borderRadius: '0.3rem', px: 2 } }
                 >
                   { row.titulo }
                 </Grid>
@@ -46,22 +43,22 @@ export const NoticiasTabla = ( { noticias }: Props ) => {
               <TableCell>
                 <Grid
                   container
-                  justifyContent='center'
                   alignItems='center'
                   sx={ {
                     backgroundColor: '#DBE3E3',
                     height: '3rem',
-                    borderRadius: '0.3rem'
-
+                    borderRadius: '0.3rem',
+                    px: 2
                   } }
                 >
                   { row.fechaRegistro }
                 </Grid>
               </TableCell>
               <TableCell>
-                <Button sx={ { width: 'auto', mx: 1 } } variant="contained" color="error" >Eliminar</Button>
-                <Button sx={ { width: 'auto', mx: 1 } } variant="contained">Ocultar</Button>
-                <Button sx={ { width: 'auto', mx: 1 } } variant="contained">Modificar</Button>
+
+                <Button sx={ { width: 'auto', mx: 1 } } variant="contained" color="error" ><DeleteIcon /></Button>
+                <Button sx={ { width: 'auto', mx: 1 } } variant="contained"><RemoveCircleIcon /></Button>
+                <Button sx={ { width: 'auto', mx: 1 } } variant="contained"> <ModeEditIcon /> </Button>
               </TableCell>
             </TableRow>
           ) ) }

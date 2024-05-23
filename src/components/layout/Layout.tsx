@@ -6,6 +6,7 @@ export const Layout = () => {
     <>
       {/* Navbar */ }
       <Navbar />
+
       {/* Children */ }
       <Outlet />
 
