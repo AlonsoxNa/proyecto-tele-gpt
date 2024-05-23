@@ -24,7 +24,6 @@
   left: 18vw;
   max-width: 30vw;
   transform: translate(-50%, -50%);
-  color: #000; /* Color del texto */
   z-index: 4; /* Asegura que el contenido esté encima del fondo */
 }
 
@@ -33,6 +32,9 @@
   font-family: "Roboto", sans-serif;
   font-weight: 800;
   font-style: normal;
+  color: white;
+  text-shadow: 2px 2px 4px black;
+  margin: 20px 0;
 }
 
 

@@ -5,7 +5,7 @@ import Navbar from "@/Componentes/Navbar";
 export const Solofoto = () => {
     return (
         <>
-            <Navbar />
+            <Navbar nombreUsuario="Anónimo" />
             <div className="container mt-4">
                 <div className="row">
                     <div className="col-md-6">
@@ -21,7 +21,7 @@ export const Solofoto = () => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="mediaUpload" className="form-label">Sube la foto</label>
-                            <MediaUpload id="mediaUpload" />
+                            <MediaUpload  />
                         </div>
                     </div>
                 </div>

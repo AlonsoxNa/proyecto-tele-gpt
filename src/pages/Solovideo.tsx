@@ -5,7 +5,7 @@ import Navbar from "@/Componentes/Navbar";
 export const Solovideo = () => {
     return (
         <>
-            <Navbar />
+            <Navbar nombreUsuario="Anónimo"/>
             <div className="container mt-4">
                 <div className="row">
                     <div className="col-md-6">
@@ -17,7 +17,7 @@ export const Solovideo = () => {
                     <div className="col-md-6">
                         <div className="mb-3">
                             <label htmlFor="mediaUpload" className="form-label">Sube el video</label>
-                            <MediaUpload id="mediaUpload" />
+                            <MediaUpload />
                         </div>
                     </div>
                 </div>

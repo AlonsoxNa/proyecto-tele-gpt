@@ -2,7 +2,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ children, nombreUsuario = 'Anonimo' }) => {
+interface Navbar{
+  nombreUsuario:string;
+}
+
+
+const Navbar = ({ nombreUsuario = 'Anonimo' }:Navbar ) => {
+
     return (
         <div style={{ marginBottom: '2rem' }}>
             <nav className='navbar navbar-expand-lg custom-navbar-color'>
@@ -19,7 +25,7 @@ const Navbar = ({ children, nombreUsuario = 'Anonimo' }) => {
                     </button>
 
                     <div className='collapse navbar-collapse' id='navbarNavAltMarkup'>
-                        <div className='navbar-nav'>{children}</div>
+                        <div className='navbar-nav'></div>
                         <div className='container'>
                             <div className='row'>
                                 <div className='col-2'>

@@ -1,10 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "@/Componentes/Navbar";
 
+
+
 const Ayuda = () => {
     return (
         <>
-            <Navbar />
+            <Navbar nombreUsuario="Anónimo" />
             <div className="container mt-4">
                 <h1>Modo de uso</h1>
                 <div className="mb-4">
