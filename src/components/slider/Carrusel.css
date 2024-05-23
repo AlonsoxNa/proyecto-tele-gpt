@@ -36,8 +36,35 @@
   text-shadow: 2px 2px 4px black;
   margin: 20px 0;
 }
+.box-publicacion-contenido{
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background-color: antiquewhite;
+  font-size: xx-large;
+  z-index: 4;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
 
-
+.content-publicacion {
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+  z-index: 4; /* Asegura que el contenido esté encima del fondo */
+}
+.titulo-publicacion-publicacion{
+  font-size: 6vh;
+  font-family: "Roboto", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  color: white;
+  text-shadow: 2px 2px 4px black;
+  text-align: center;
+}
 /* 
 @keyframes tonext {
   75% {

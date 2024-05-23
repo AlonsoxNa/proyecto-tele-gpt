@@ -1,14 +1,14 @@
 import axios from "axios";
+import { useUserStore } from '@/stores/user.store';
 
 //const axiosInstance=AxiosInterceptor();
 const API_URL=import.meta.env.VITE_API_ENDPOINT;
-//const token = useUserStore.getState().user.token;
+const token = useUserStore.getState().user.token;
 
-const BusServiceConductor ={
-
-    obtenerBuses: async () => {
+const NoticiaService ={
+    obtenerNoticiasMostradas: async () => {
         try {
-            const response = await axios.get(`${API_URL}/bus/todos-disponibles`, {
+            const response = await axios.get(`${API_URL}/noticia/habilitadas`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -21,10 +21,10 @@ const BusServiceConductor ={
                 return [];
             }
         } catch (error) {
-            console.error('Error al obtener Buses', error);
+            console.error('Error al obtener noticias', error);
             return [];
         }
     }
 
 }
-export default BusServiceConductor;
+export default NoticiaService;
