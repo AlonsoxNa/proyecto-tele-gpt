@@ -7,7 +7,7 @@ export const HomeTemporal = () => {
       <div className="d-flex justify-content-center align-items-center gap-4 vh-100">
         <Link className="btn btn-primary" to="/crear-anuncio">Ir a crear anuncio</Link>
         <Link className="btn btn-primary" to="/slider" >Ir a slider</Link>
-        <Link className="btn btn-primary" to="/admin" >Ir a Configurar anuncios</Link>
+        <Link className="btn btn-primary" to="/admin/anuncios" >Ir a Configurar anuncios</Link>
       </div>
     </>
   );

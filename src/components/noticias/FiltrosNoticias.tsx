@@ -1,22 +1,21 @@
-import SearchIcon from '@mui/icons-material/Search';
-import { Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useFiltroSearchStore } from '@/stores/noticias/filtroSearch.store';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { ChangeEvent, FC } from 'react';
 
-const STATUS_NOTICIAS = {
-  TODAS: 'Todas',
-  DISPONIBLES: 'Disponibles',
-  OCULTAS: 'Ocultas'
-};
+export const FiltrosNoticias: FC = () => {
 
-export const FiltrosNoticias = () => {
-
-  const [ statusNoticia, setStatusNoticia ] = useState( STATUS_NOTICIAS.TODAS );
+  const { handleChangeFiltroSearch, handleChangeFiltroStatus, filtroSearch, filtroStatus } = useFiltroSearchStore();
 
   const handleChangeStatusNoticia = ( { target }: SelectChangeEvent ) => {
     const { value } = target;
-    setStatusNoticia( value );
+    handleChangeFiltroStatus( value );
+  };
+
+  const handleChangeSearch = ( { target }: ChangeEvent<HTMLInputElement> ) => {
+    handleChangeFiltroSearch( target.value );
   };
 
   return (
@@ -37,11 +36,13 @@ export const FiltrosNoticias = () => {
         <TextField
           variant="outlined"
           placeholder="Buscar noticia..."
+          value={ filtroSearch }
           InputProps={ {
             startAdornment: <InputAdornment position="start">
               <SearchIcon />
             </InputAdornment>
           } }
+          onChange={ handleChangeSearch }
         />
       </Grid>
       <Grid item xs={ 12 } md={ 4 } sx={ { display: 'flex', flexDirection: 'row', alignItems: 'center' } } gap={ 1 }>
@@ -52,7 +53,7 @@ export const FiltrosNoticias = () => {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={ statusNoticia }
+            value={ filtroStatus }
             label="Estado"
             onChange={ handleChangeStatusNoticia }
           >
@@ -62,15 +63,15 @@ export const FiltrosNoticias = () => {
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={ 12 } md={ 4 } sx={ { display: 'flex', flexDirection: 'row', alignItems: 'center' } } gap={ 1 }>
-
+      <Grid item xs={ 12 } md={ 4 } sx={ { display: 'flex', flexDirection: 'row', alignItems: 'center' } }>
         <Button
           variant="contained"
           color="primary"
           disabled
-          sx={ { width: 'auto' } }>
-          <RemoveCircleIcon />
-          Ocultar todas
+          sx={ { width: 'auto' } }
+          startIcon={ <RemoveCircleIcon /> }
+        >
+          Ocultar seleccionadas
         </Button>
       </Grid>
     </Grid>

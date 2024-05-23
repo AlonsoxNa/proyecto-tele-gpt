@@ -33,7 +33,7 @@ const Navbar = () => {
             <div className='container'>
               <div className='row'>
                 <div className='col-2'>
-                  <Link className='navtext' to={ '/admin' }>Noticias Mostradas</Link>
+                  <Link className='navtext' to={ '/admin/anuncios' }>Noticias Mostradas</Link>
                 </div>
 
                 <div className='col-2'>

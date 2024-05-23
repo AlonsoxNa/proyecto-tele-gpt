@@ -1,15 +1,17 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Grid, Button } from '@mui/material';
+import { Grid, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 // import './TablaSimplev2.css'; // Importa tu archivo CSS personalizado
+import { useFiltroSearchStore } from '@/stores/noticias/filtroSearch.store';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { Noticia } from '@/interfaces/Noticia';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import { FC } from 'react';
 
-interface Props {
-  noticias: Noticia[];
-}
 
-export const NoticiasTabla = ( { noticias }: Props ) => {
+export const NoticiasTabla: FC = () => {
+
+  const { noticias } = useFiltroSearchStore();
+
   return (
     <TableContainer>
       <Table
@@ -56,9 +58,13 @@ export const NoticiasTabla = ( { noticias }: Props ) => {
               </TableCell>
               <TableCell>
 
-                <Button sx={ { width: 'auto', mx: 1 } } variant="contained" color="error" ><DeleteIcon /></Button>
-                <Button sx={ { width: 'auto', mx: 1 } } variant="contained"><RemoveCircleIcon /></Button>
-                <Button sx={ { width: 'auto', mx: 1 } } variant="contained"> <ModeEditIcon /> </Button>
+                <Stack direction="row" spacing={ 1 }>
+                  <IconButton sx={ { width: 'auto' } } color="error" ><DeleteIcon /></IconButton>
+                  <IconButton sx={ { width: 'auto' } } color={ row.habilitado ? 'error' : 'success' } >
+                    { row.habilitado ? <RemoveCircleIcon /> : <AddCircleIcon /> }
+                  </IconButton>
+                  <IconButton sx={ { width: 'auto' } } color="primary"> <ModeEditIcon /> </IconButton>
+                </Stack>
               </TableCell>
             </TableRow>
           ) ) }

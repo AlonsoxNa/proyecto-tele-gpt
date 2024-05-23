@@ -1,7 +1,6 @@
-import { Grid } from '@mui/material';
-import { noticias } from '@/assets/data/noticiasTemporal';
-import { NoticiasTabla } from '@/components/noticias/NoticiasTabla';
 import { FiltrosNoticias } from '@/components/noticias/FiltrosNoticias';
+import { NoticiasTabla } from '@/components/noticias/NoticiasTabla';
+import { Grid } from '@mui/material';
 
 export const Noticias = () => {
 
@@ -13,7 +12,7 @@ export const Noticias = () => {
         <FiltrosNoticias />
 
         {/* Tabla de noticias */ }
-        <NoticiasTabla noticias={ noticias } />
+        <NoticiasTabla />
 
       </Grid>
 
