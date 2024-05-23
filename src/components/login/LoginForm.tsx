@@ -1,7 +1,7 @@
 import { useForm } from '@/hooks/useForm';
 import { useUserStore } from '@/stores/user.store';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Button, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { FC, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,27 +13,33 @@ interface FormData {
 export const LoginForm: FC = () => {
 
   const navigate = useNavigate();
+  const { handleLogin } = useUserStore();
 
-  const { form, errors, handleChange, handleValidate } = useForm<FormData>( {
+  const { form, errors, handleChange, handleValidateAll, handleValidate } = useForm<FormData>( {
     email: '',
     password: ''
   } );
 
   const [ showPassword, setShowPassword ] = useState( false );
 
+  const [ isLoading, setIsLoading ] = useState( false );
+
   const handleClickShowPassword = () => setShowPassword( ( show ) => !show );
 
-  const { handleLogin } = useUserStore();
+  const handleClose = () => {
+    setIsLoading( false );
+  };
 
   const handleSubmit = async ( e: FormEvent<HTMLFormElement> ) => {
+    setIsLoading( true );
     e.preventDefault();
 
-    const errors = await handleValidate();
+    const errors = await handleValidateAll();
     if ( errors.length === 0 ) {
-      handleLogin( form.email, form.password );
+      handleLogin( form.email, form.email, 'soy un token' );
       navigate( '/home' );
     }
-
+    setIsLoading( false );
   };
 
   return (
@@ -53,7 +59,7 @@ export const LoginForm: FC = () => {
               value={ form.email }
               onChange={ handleChange }
               helperText={ errors.email }
-              onBlur={ handleValidate }
+              onBlur={ ( e ) => handleValidate( e.target.name ) }
               fullWidth
             />
           </Grid>
@@ -78,7 +84,7 @@ export const LoginForm: FC = () => {
               label="Contraseña"
               value={ form.password }
               onChange={ handleChange }
-              onBlur={ handleValidate }
+              onBlur={ ( e ) => handleValidate( e.target.name ) }
               fullWidth
             />
           </Grid>
@@ -87,12 +93,21 @@ export const LoginForm: FC = () => {
               variant="contained"
               type="submit"
               sx={ { width: 'auto' } }
+              disabled={ isLoading }
             >Iniciar sesión</Button>
           </Grid>
         </Grid>
 
       </form>
 
+      {/* Loading */ }
+      <Backdrop
+        sx={ { color: '#fff', zIndex: ( theme ) => theme.zIndex.drawer + 1 } }
+        open={ isLoading }
+        onClick={ handleClose }
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Grid>
   );
 };
