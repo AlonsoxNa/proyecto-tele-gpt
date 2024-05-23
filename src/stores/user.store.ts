@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 
 interface State {
   user: {
+    name: string;
     email: string;
     token: string;
     isLogged: boolean;
@@ -10,7 +11,7 @@ interface State {
 }
 
 interface Actions {
-  handleLogin: (email: string, token: string) => void;
+  handleLogin: (name:string, email: string, token: string) => void;
   handleLogout: () => void;
 }
 
@@ -18,15 +19,16 @@ export const useUserStore = create<State & Actions>()(
   persist(
     (set) => ({
       user: {
+        name: '',
         email: '',
         token: '',
         isLogged: false 
       },
-      handleLogin: (email: string, token: string) => {
-        set({ user: { email, token, isLogged: true } });
+      handleLogin: (name:string, email: string, token: string) => {
+        set({ user: { name, email, token, isLogged: true } });
       },
       handleLogout() {
-        set({ user: { email: '', token: '', isLogged: false } });
+        set({ user: { name: '', email: '', token: '', isLogged: false } });
         localStorage.removeItem('user-storage');
       },
     }), {
