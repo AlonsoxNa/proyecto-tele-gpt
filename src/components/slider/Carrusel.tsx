@@ -1,33 +1,7 @@
-import Image1 from '@/assets/publicacion2.jpg';
-import Image2 from '@/assets/publicacion3.jpg';
 import { useEffect,useRef, useState } from 'react';
-import Video1 from '@/assets/publicacion1.mp4';
-import "./Carrusel.css";
-
 import NoticiaService from '@/services/Noticias';
-import { set } from 'date-fns';
-
-const itemSlider = [
-  {
-    multimedia: Image1,
-    label: 'Titulo de la notica 1, prueba de cuanto deberia tener de largo1',
-    type: 'image',
-    text: 'Titulo de la notica 1, prueba de cuanto deberia tener de largo'
-  },
-  {
-    multimedia: Image2,
-    label: 'Titulo de la notica 2, prueba de cuanto deberia tener de largo2',
-    type: 'image',
-    text: 'Soy un texto 2'
-  },
-  {
-    multimedia: Video1,
-    label: 'Titulo de la notica 3, prueba de cuanto deberia tener de largo3',
-    type: 'video',
-    text: 'Soy un texto video 1'
-  }
-  //TAMBIEN DEBERIA RECIBIR LA DURACION DEL VIDEO PARA SETEAR ESTE
-];
+import "./CintaNoticia.css";
+import "./Carrusel.css";
 
 interface Noticia {
   categoriaId:string,
@@ -69,22 +43,8 @@ export const Carrusel = () => {
   const buttonItemNext = useRef<HTMLButtonElement>(null);
   const [noticias,setNoticias] = useState<Noticia[]>([noticia_vacia])
 
-  useEffect(()=>{
-    const timer = () => {
-      return setTimeout(() => {
-        if (buttonItemNext.current) {
-          buttonItemNext.current.click();
-        }
-      }, 9000);
-    };
-    // Iniciar el temporizador cuando el componente se monte
-    timer();
-    obtenerNoticias()
-  },[])
-
   const obtenerNoticias = async () => {
     const respuesta = await NoticiaService.obtenerNoticiasMostradas()
-    //console.log(respuesta)
     if (respuesta){
       setNoticias(respuesta)
     }
@@ -95,7 +55,7 @@ export const Carrusel = () => {
     if (url){
       const match = url.match(youtubeRegex);
       if (match && match[1]) {
-        return `https://www.youtube.com/embed/${match[1]}?autoplay=1&mute=1&loop=1&playlist=${match[1]}`;
+        return `https://www.youtube.com/embed/${match[1]}?autoplay=1&mute=1&loop=1&controls=0&playlist=${match[1]}`;
       }
     }
     return '';
@@ -104,142 +64,188 @@ export const Carrusel = () => {
   const getDuracion = (segundos:number) => {
     return String(segundos*1000)
   }
+  const timer = () => {
+    if (buttonItemNext.current) {
+      buttonItemNext.current.click();
+      //console.log("btn sgte")
+    }
+  };
+  timer();
+  useEffect(()=>{
+    obtenerNoticias()
+  },[])
+  useEffect(()=>{
+    const timer = () => {
+      return setTimeout(() => {
+        obtenerNoticias()       //obtengo noticias actualizadas cada 1 hora
+      }, 60*60*1000);
+    };
+    // Iniciar el temporizador cuando el componente se monte
+    timer();
+  },[])
+
+  useEffect(() => {
+    const handleSlide = () => {
+      if (carouselRef.current){
+        const items = carouselRef.current.querySelectorAll('.carousel-item');
+        items.forEach((item, index) => {
+          const iframe = item.querySelector('iframe');
+          if (iframe) {
+            if (item.classList.contains('active')) {
+              // Agregar autoplay al iframe del slide activo
+              const src = iframe.getAttribute('src');
+              if (src && !src.includes('autoplay=1')){
+                iframe.setAttribute('src', `${src}${src.includes('?') ? '&' : '?'}autoplay=1`);
+                //console.log("agrega el autoplay")
+              }
+              
+            } else {
+              // Remover autoplay del iframe de slides inactivos
+              const src = iframe.getAttribute('src');
+              if (src){
+                iframe.setAttribute('src', src.replace('autoplay=1', ''));
+                //console.log("remueve el autoplay")
+              }
+            }
+          }
+        });
+      }
+      
+    };
+    if (carouselRef.current){
+      // Agregar evento al cambiar slide
+      carouselRef.current.addEventListener('slid.bs.carousel', handleSlide);
+  
+      // Limpiar evento al desmontar el componente
+      return () => {
+        if (carouselRef.current){
+          carouselRef.current.removeEventListener('slid.bs.carousel', handleSlide);
+        }
+      };
+
+    }
+  }, []);
 
   return (
     <div className="w-full">
-      <div ref={carouselRef} data-bs-interval="false" id="carouselExampleCaptions" className="carousel slide carousel-container" data-bs-ride="carousel">
-        <div className="carousel-inner">
-          {/* {
-            itemSlider.map((item,index)=>(
-              <div key={index} ref={carouselItem}// Añadir un key único para cada elemento del mapa
-              className={`carousel-item${index === 0 ? ' active' : ''}`} // Clase condicional para el primer elemento
-              data-bs-interval="9000">
-                <div className="carousel-container">
-                {
-                  item.type === 'video'?
+      {
+        noticias.length==0?
+        <>
+          <h1>No hay noticias por mostrar</h1>
+        </>
+        :
+        <>
+          <div ref={carouselRef} data-bs-interval="false" id="carouselExampleCaptions" className="carousel slide carousel-container" data-bs-ride="carousel">
+            <div className="carousel-inner">
+              {
+                noticias.map((noticia,index)=>(
                   <>
-                    <div className="bg-image" style={{ backgroundImage: `url(/src/assets/logo.png)`,backgroundColor:"gray" }}></div>
-                  </>
-                  :<></>
-                }
-                <div className="bg-image" style={{ backgroundImage: `url(${item.multimedia})` }}></div>
-                <div className="carousel-container justify-content-center d-flex">
-                    {item.type === 'video' && (
-                        <video id={`video-${item.label}`} controls loop muted autoPlay className="z-2" >
-                              <source src={item.multimedia} type="video/mp4" />
-                          </video> 
-                    )}
-                    {item.type === 'image' && (
-                        <img src={item.multimedia}  alt="" className="d-block h-100 z-2" />
-                        )}
-                </div>
-                <div className="carousel-content">
-                    <span className="titulo-publicacion">{item.label}</span>
-                  </div>
-                </div>
-              </div>
-            ))
-          } */}
-          {
-            noticias.map((noticia,index)=>(
-              <div key={index} ref={carouselItem}// Añadir un key único para cada elemento del mapa
-                className={`carousel-item${index === 0 ? ' active' : ''}`} // Clase condicional para el primer elemento
-                data-bs-interval={getDuracion(noticia.duracion)}>
-                  <div className="carousel-container">
-                    {
-                      noticia.tipo=="Normal" || noticia.tipo=="Multimedia"?
-                      <>
-                          {
-                            noticia.extension === 'mp4'?
-                            <>
-                              <div className="bg-image" style={{ backgroundImage: `url(/src/assets/logo.png)`,backgroundColor:"gray" }}></div>
-                            </>
-                            :<></>
-                          }
-                          <div className="bg-image" style={{ backgroundImage: `url(${noticia.multimedia})` }}></div>
-                          <div className="carousel-container justify-content-center d-flex">
-                            {
-                              noticia.extension === 'mp4'?
-                              <>
-                                <video id={`video-${noticia.titulo}`} controls loop muted autoPlay className="z-2">
-                                  <source src={`data:video/${noticia.extension};base64,${noticia.multimedia}`} type={`video/${noticia.extension}`} />
-                                </video>
-                              </>
-                              :
-                              <>
-                                <img src={`data:image/${noticia.extension};base64, ${noticia.multimedia}`}  alt="" className="d-block h-100 z-2" />
-                              </>
-                            }
-                          </div>
-                          <div className="carousel-content">
-                              <span className="titulo-publicacion">{noticia.titulo}</span>
-                          </div>
-                      </>
-                      :noticia.tipo=="Publicacion"?
-                      <>
+                    <div key={index} ref={carouselItem}// Añadir un key único para cada elemento del mapa
+                      className={`carousel-item${index === 0 ? ' active' : ''}`} // Clase condicional para el primer elemento
+                      data-bs-interval={getDuracion(noticia.duracion)}>
                         <div className="carousel-container">
-                          <div className="bg-image" style={{ backgroundImage: `url(/src/assets/logo.png)`,backgroundColor:"gray" }}></div>
-                          <div className='box-publicacion-contenido'>
-                            <p className=''>
-                              {
-                                noticia.contenido
-                              }
-                            </p>
-                            
-                          </div>
-                          <div className="content-publicacion">
-                              <span className="titulo-publicacion-publicacion">{noticia.titulo}</span>
-                          </div>
-                        </div>
-                      </>
-                      :
-                      //es url
-                      <>
-                        {
-                            noticia.extension === 'mp4'?
+                          {
+                            noticia.tipo=="Normal" || noticia.tipo=="Multimedia"?
                             <>
-                              <div className="bg-image" style={{ backgroundImage: `url(/src/assets/logo.png)`,backgroundColor:"gray" }}></div>
+                                {/* <div className="bg-image" style={{ backgroundImage: `url(${noticia.multimedia})` }}></div> */}
+                                <div className="bg-image" style={{ backgroundImage: `url(data:image/${noticia.extension};base64,${noticia.multimedia})` }}></div>
+                                <div className="carousel-container justify-content-center d-flex">
+                                    <>
+                                      <img src={`data:image/${noticia.extension};base64, ${noticia.multimedia}`}  alt="" className="d-block h-100 z-2" />
+                                    </>
+                                </div>
+                                <div className="carousel-content">
+                                    <span className="titulo-publicacion">{noticia.titulo}</span>
+                                </div>
                             </>
-                            :<></>
+                            :noticia.tipo=="Publicacion"?
+                            <>
+                              <div className="carousel-container">
+                                <div className="bg-image" style={{ backgroundImage: `url(/src/assets/logo.png)`,backgroundColor:"gray" }}></div>
+                                <div className='box-publicacion-contenido'>
+                                  <p className=''>
+                                    {
+                                      noticia.contenido
+                                    }
+                                  </p>
+                                  
+                                </div>
+                                <div className="content-publicacion">
+                                    <span className="titulo-publicacion-publicacion">{noticia.titulo}</span>
+                                </div>
+                              </div>
+                            </>
+                            :
+                            //es url
+                            <>
+                                <div className="bg-image" style={{ backgroundImage: `url(${noticia.multimedia})` }}></div>
+                                <div className="carousel-container justify-content-center d-flex">
+                                  {
+                                      <iframe
+                                        width={"100%"}
+                                        // height="315"
+                                        src={getYouTubeEmbedUrl(noticia.multimedia_url)}
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        title="YouTube video"
+                                      ></iframe>
+                                  }
+                                </div>
+                                <div className="carousel-content">
+                                    <span className="titulo-publicacion">{noticia.titulo}</span>
+                                </div>
+                            </>
                           }
-                          <div className="bg-image" style={{ backgroundImage: `url(${noticia.multimedia})` }}></div>
-                          <div className="carousel-container justify-content-center d-flex">
-                            {
-                                <iframe
-                                  width={"100%"}
-                                  // height="315"
-                                  src={getYouTubeEmbedUrl(noticia.multimedia_url)}
-                                  frameBorder="0"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowFullScreen
-                                  title="YouTube video"
-                                ></iframe>
-                            }
+                        </div>
+                        {
+                          noticia.contenido?
+                          <>
+                            <div className='contenedor-titulo'>  
+                            <h1 className='cinta-titulo'>
+                              Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen.
+                            </h1>
                           </div>
-                          <div className="carousel-content">
-                              <span className="titulo-publicacion">{noticia.titulo}</span>
-                          </div>
-                      </>
-                    }
-                  </div>
-              </div>
-            ))
-          }
-        </div>
-        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button ref={buttonItemNext} className="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Next</span>
-        </button>
-      </div>
-      <div className='w-full descripcion-container justify-content-center flex'>
-        {/* <h1 className='text-center'>
-        Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen.
-        </h1> */}
-      </div>
+                          </>
+                          :
+                          <>
+                          </>
+                        }
+                    </div>
+                    
+                    
+                  </>
+                ))
+              }
+            </div>
+            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+              <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span className="visually-hidden">Previous</span>
+            </button>
+            <button ref={buttonItemNext} className="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+              <span className="carousel-control-next-icon" aria-hidden="true"></span>
+              <span className="visually-hidden">Next</span>
+            </button>
+          </div>
+          {/* <div className='w-full descripcion-container justify-content-center flex'>
+            {
+              noticias.map((noticia,index)=>(
+                  noticia.contenido?
+                  <>
+                  <div className='contenedor-titulo'>  
+                    <h1 className='cinta-titulo'>
+                      Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen.
+                    </h1>
+                  </div> 
+                  </>
+                  :
+                  <></>
+              ))
+            }
+          </div> */}
+        </>
+        }
+      
     </div>
   );
 };
