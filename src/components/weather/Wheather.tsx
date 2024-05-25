@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useState } from "react";
+
 import "../slider/NavbarInicio.css";
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined';
 
@@ -30,7 +29,7 @@ interface Data {
     timezone: number
 }
 
-const Weather = ({coord,main,wind,weather,name,timezone}:Data) => {
+const Weather = ({main,wind,weather,name}:Data) => {
     return(
         <div className="d-flex">
             <div className="align-items-center d-flex">
