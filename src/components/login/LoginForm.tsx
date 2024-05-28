@@ -44,7 +44,7 @@ export const LoginForm: FC = () => {
     if ( errors.length === 0 ) {
       const response: responseAuth = await login( form.email, form.password ) as responseAuth;
 
-      if ( response.response.status === 200 ) {
+      if ( response.status === 200 ) {
         handleLogin( form.email, form.email, response.data );
         handleCloseLoading();
         navigate( '/home' );
