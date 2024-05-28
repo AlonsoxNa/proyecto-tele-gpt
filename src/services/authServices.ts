@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = import.meta.env.BASE_URL;
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 export const login = async ( email: string, contrasena: string ) => {
   try {

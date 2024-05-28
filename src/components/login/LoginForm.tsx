@@ -2,10 +2,11 @@ import { useForm } from '@/hooks/useForm';
 import { LoginFormData, responseAuth } from '@/interfaces/Login';
 import { useUserStore } from '@/stores/user.store';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Backdrop, Button, CircularProgress, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Alert, Backdrop, Button, CircularProgress, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { FC, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '@/services/authServices';
+import { Snackbar } from '@mui/material';
 
 export const LoginForm: FC = () => {
 
@@ -21,9 +22,17 @@ export const LoginForm: FC = () => {
 
   const [ isLoading, setIsLoading ] = useState( false );
 
+  // Snackbar
+  const [ openSnackbar, setOpenSnackbar ] = useState<boolean>( false );
+  const [ messageSnackbar, setMessageSnackbar ] = useState<string>( "" );
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar( false );
+  };
+
   const handleClickShowPassword = () => setShowPassword( ( show ) => !show );
 
-  const handleClose = () => {
+  const handleCloseLoading = () => {
     setIsLoading( false );
   };
 
@@ -33,15 +42,22 @@ export const LoginForm: FC = () => {
 
     const errors = await handleValidateAll();
     if ( errors.length === 0 ) {
-      const response: responseAuth = await login( form.email, form.password ) as responseAuth; // Explicitly type the response variable as responseAuth
+      const response: responseAuth = await login( form.email, form.password ) as responseAuth;
 
       if ( response.status === 200 ) {
         handleLogin( form.email, form.email, response.data );
-        setIsLoading( false );
+        handleCloseLoading();
         navigate( '/home' );
+      } else if ( response.status === 204 ) {
+        setMessageSnackbar( "El usuario no existe" );
+      } else if ( response.status === 409 ) {
+        setMessageSnackbar( "Correo o contraseña incorrectos" );
+      } else {
+        setMessageSnackbar( "Error al iniciar sesión" );
       }
+      setOpenSnackbar( true );
     }
-    setIsLoading( false );
+    handleCloseLoading();
   };
 
   return (
@@ -106,10 +122,20 @@ export const LoginForm: FC = () => {
       <Backdrop
         sx={ { color: '#fff', zIndex: ( theme ) => theme.zIndex.drawer + 1 } }
         open={ isLoading }
-        onClick={ handleClose }
+        onClick={ handleCloseLoading }
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Snackbar open={ openSnackbar } autoHideDuration={ 6000 } onClose={ handleCloseSnackbar }>
+        <Alert
+          onClose={ handleCloseSnackbar }
+          severity="error"
+          variant="filled"
+          sx={ { width: '100%' } }
+        >
+          { messageSnackbar }
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 };
