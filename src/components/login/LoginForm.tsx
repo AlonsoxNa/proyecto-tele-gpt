@@ -44,13 +44,13 @@ export const LoginForm: FC = () => {
     if ( errors.length === 0 ) {
       const response: responseAuth = await login( form.email, form.password ) as responseAuth;
 
-      if ( response.status === 200 ) {
+      if ( response.response.status === 200 ) {
         handleLogin( form.email, form.email, response.data );
         handleCloseLoading();
         navigate( '/home' );
-      } else if ( response.status === 204 ) {
+      } else if ( response.response.status === 204 ) {
         setMessageSnackbar( "El usuario no existe" );
-      } else if ( response.status === 409 ) {
+      } else if ( response.response.status === 409 ) {
         setMessageSnackbar( "Correo o contraseña incorrectos" );
       } else {
         setMessageSnackbar( "Error al iniciar sesión" );

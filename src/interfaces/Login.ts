@@ -6,4 +6,7 @@ export interface LoginFormData {
 export interface responseAuth {
   status: number;
   data: string;
+  response: {
+    status: number;
+  };
 }
