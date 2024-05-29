@@ -1,6 +1,10 @@
 export interface Noticia {
-  id: number;
+  id: string;
   titulo: string;
   fechaRegistro: string;
   habilitado: boolean;
+  duracion: number;
+  contenido: string;
+  tipo: string;
+  multimedia: string;
 }

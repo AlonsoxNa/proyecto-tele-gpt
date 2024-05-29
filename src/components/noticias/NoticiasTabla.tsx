@@ -8,6 +8,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { FC, useEffect, useState } from 'react';
 import { formatDate } from '@/utils/noticias/convertirFecha';
+import { cambiarEstadoNoticiaAPI } from '@/services/noticiasService';
 
 
 export const NoticiasTabla: FC = () => {
@@ -18,8 +19,8 @@ export const NoticiasTabla: FC = () => {
   const { noticiasSelected, handleAddNoticia } = useSelectNoticias();
 
   const [ openSnackbar, setOpenSnackbar ] = useState<boolean>( false );
-  // const [ messageSnackbar, setMessageSnackbar ] = useState<string>( "" );
-  // const [ isError, setIsError ] = useState<boolean>( false );
+  const [ messageSnackbar, setMessageSnackbar ] = useState<string>( "" );
+  const [ isError, setIsError ] = useState<boolean>( false );
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar( false );
@@ -29,6 +30,23 @@ export const NoticiasTabla: FC = () => {
     fetchNoticias();
     setIsLoading( false );
   }, [ fetchNoticias ] );
+
+  const handleChangeStatusNoticia = async ( id: string, status: boolean ) => {
+    setIsLoading( true );
+
+    const response = await cambiarEstadoNoticiaAPI( id, !status );
+
+    if ( response?.status === 204 ) {
+      setMessageSnackbar( `Has ${ status ? 'ocultado' : 'mostrado' } esta noticia correctamente` );
+      setIsError( false );
+    } else {
+      setMessageSnackbar( `Error al ${ status ? 'ocultar' : 'mostrar' } la noticia` );
+      setIsError( true );
+    }
+    setOpenSnackbar( true );
+    fetchNoticias();
+    setIsLoading( false );
+  };
 
   return (
     <TableContainer>
@@ -81,7 +99,11 @@ export const NoticiasTabla: FC = () => {
 
                 <Stack direction="row" spacing={ 1 }>
                   <IconButton sx={ { width: 'auto', backgroundColor: '#ffc6ba' } } color="error" ><DeleteIcon /></IconButton>
-                  <IconButton sx={ { width: 'auto', backgroundColor: row.habilitado ? '#ffc6ba' : '#c7ffc9' } } color={ row.habilitado ? 'error' : 'success' } >
+                  <IconButton
+                    sx={ { width: 'auto', backgroundColor: row.habilitado ? '#ffc6ba' : '#c7ffc9' } }
+                    color={ row.habilitado ? 'error' : 'success' }
+                    onClick={ () => handleChangeStatusNoticia( row.id, row.habilitado ) }
+                  >
                     { row.habilitado ? <RemoveCircleIcon /> : <AddCircleIcon /> }
                   </IconButton>
                   <IconButton sx={ { width: 'auto', backgroundColor: '#c6def5' } } color="primary"> <ModeEditIcon /> </IconButton>
@@ -101,11 +123,11 @@ export const NoticiasTabla: FC = () => {
       <Snackbar open={ openSnackbar } autoHideDuration={ 6000 } onClose={ handleCloseSnackbar }>
         <Alert
           onClose={ handleCloseSnackbar }
-          // severity={ isError ? 'error' : 'success' }
+          severity={ isError ? 'error' : 'success' }
           variant="filled"
           sx={ { width: '100%' } }
         >
-          {/* { messageSnackbar } */ }
+          { messageSnackbar }
         </Alert>
       </Snackbar>
     </TableContainer >

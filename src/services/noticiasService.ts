@@ -20,3 +20,15 @@ export const getNoticiasAPI = async () => {
     return [];
   }
 };
+
+export const cambiarEstadoNoticiaAPI = async ( id: string, estado: boolean ) => {
+  try {
+    const response = await axios.patch( `${ API_URL }/noticia/cambiar-estado?id=${ id }`, {
+      estado
+    } );
+
+    return response;
+  } catch ( error ) {
+    return;
+  }
+};
