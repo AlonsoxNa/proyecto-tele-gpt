@@ -1,3 +1,5 @@
+import { Categoria } from './Categoria';
+
 export interface Noticia {
   id: string;
   titulo: string;
@@ -7,6 +9,7 @@ export interface Noticia {
   contenido: string;
   tipo: string;
   multimedia: string;
+  categoria: Categoria;
 }
 
 export interface ResponseCambiarEstadoNoticia {

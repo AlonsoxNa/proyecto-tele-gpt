@@ -1,4 +1,4 @@
-import { Alert, Backdrop, Checkbox, CircularProgress, Grid, IconButton, Snackbar, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Alert, Backdrop, Checkbox, CircularProgress, Grid, IconButton, Snackbar, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 // import './TablaSimplev2.css'; // Importa tu archivo CSS personalizado
 import { cambiarEstadoNoticiaAPI } from '@/services/noticiasService';
 import { useNoticiasStore } from '@/stores/noticias/noticias.store';
@@ -23,6 +23,7 @@ export const NoticiasTabla: FC = () => {
   const [ messageSnackbar, setMessageSnackbar ] = useState<string>( "" );
   const [ isError, setIsError ] = useState<boolean>( false );
 
+
   const handleCloseSnackbar = () => {
     setOpenSnackbar( false );
   };
@@ -37,7 +38,7 @@ export const NoticiasTabla: FC = () => {
 
     const response: ResponseCambiarEstadoNoticia = await cambiarEstadoNoticiaAPI( id, !status ) as ResponseCambiarEstadoNoticia;
 
-    if ( response?.status === 204 ) {
+    if ( response.status === 204 ) {
       setMessageSnackbar( `Has ${ status ? 'ocultado' : 'mostrado' } esta noticia correctamente` );
       setIsError( false );
     } else {
@@ -74,7 +75,18 @@ export const NoticiasTabla: FC = () => {
               Noticia
             </TableCell>
             <TableCell>
+              Categoría
+            </TableCell>
+            <TableCell>
+              Tipo
+            </TableCell>
+            <TableCell>
               Fecha
+            </TableCell>
+            <TableCell>
+              <Grid container sx={ { pl: 0.8 } }>
+                Estado
+              </Grid>
             </TableCell>
             <TableCell>
               Acciones
@@ -105,6 +117,24 @@ export const NoticiasTabla: FC = () => {
                   { row.titulo }
                 </Grid>
               </TableCell>
+              <TableCell >
+                <Grid
+                  container
+                  alignItems='center'
+                  sx={ { height: '3rem', borderRadius: '0.3rem' } }
+                >
+                  { row.categoria.nombre }
+                </Grid>
+              </TableCell>
+              <TableCell >
+                <Grid
+                  container
+                  alignItems='center'
+                  sx={ { height: '3rem', borderRadius: '0.3rem' } }
+                >
+                  { row.tipo }
+                </Grid>
+              </TableCell>
               <TableCell>
                 <Grid
                   container
@@ -112,10 +142,24 @@ export const NoticiasTabla: FC = () => {
                   sx={ {
                     height: '3rem',
                     borderRadius: '0.3rem',
-                    px: 2
                   } }
                 >
                   { formatDate( row.fechaRegistro ) }
+                </Grid>
+              </TableCell>
+              <TableCell>
+                <Grid container sx={ { height: '3rem' } } alignItems='center'>
+                  <Typography
+                    sx={ {
+                      width: 'auto',
+                      fontWeight: 400,
+                      fontSize: 14,
+                      backgroundColor: !row.habilitado ? '#ffc6ba' : '#c7ffc9',
+                      p: 0.8,
+                      borderRadius: 3
+                    } }>
+                    { row.habilitado ? 'Mostrado' : 'Oculto' }
+                  </Typography>
                 </Grid>
               </TableCell>
               <TableCell>
