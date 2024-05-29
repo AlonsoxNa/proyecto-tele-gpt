@@ -122,7 +122,6 @@ export const LoginForm: FC = () => {
       <Backdrop
         sx={ { color: '#fff', zIndex: ( theme ) => theme.zIndex.drawer + 1 } }
         open={ isLoading }
-        onClick={ handleCloseLoading }
       >
         <CircularProgress color="inherit" />
       </Backdrop>
