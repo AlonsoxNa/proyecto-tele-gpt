@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "@/Componentes/Navbar";
 import { SelecctorFechas } from "@/Componentes/SelecctorFechas";
 import NoticiaService from "../services/Noticias";
+import CategoriaService from "@/services/CategoriaService";
 
 const Solotexto = () => {
   const [titulo, setTitulo] = useState("");
@@ -15,11 +16,12 @@ const Solotexto = () => {
 
   useEffect(() => {
     const fetchCategorias = async () => {
-      const response = await axios.get(`${API_URL}/categorias`);
-      setCategorias(response.data);
+      //const response = await axios.get(`${API_URL}/categorias`);
+      const response = await CategoriaService.obtenerCategorias()
+      setCategorias(response);
     };
     fetchCategorias();
-  }, []);
+    }, []);
 
   const validateField = (field, value) => {
     let error = "";

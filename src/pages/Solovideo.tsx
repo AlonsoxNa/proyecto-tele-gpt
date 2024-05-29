@@ -4,12 +4,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "@/Componentes/Navbar";
 import MediaUpload from "../Componentes/MediaUpload";
 import NoticiaService from "../services/Noticias";
+import CategoriaService from "@/services/CategoriaService";
 
 const Solovideo = () => {
   const [titulo, setTitulo] = useState("");
   const [multimediaUrl, setMultimediaUrl] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      //const response = await axios.get(`${API_URL}/categorias`);
+      const response = await CategoriaService.obtenerCategorias()
+      setCategorias(response);
+    };
+    fetchCategorias();
+    }, []);
+
 
   const validateField = (field, value) => {
     let error = "";
@@ -58,7 +69,7 @@ const Solovideo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const tipo = "Video";
+    const tipo = "Url";
 
     // Validate all fields before submitting
     validateField("titulo", titulo);
@@ -106,7 +117,9 @@ const Solovideo = () => {
                   onChange={handleCategoriaChange}
                 >
                   <option value="">Seleccione una categoría</option>
-                  {/* Aquí se deben renderizar las opciones de categorías */}
+                  {categorias.map((categoria) => (
+                    <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>
+                  ))}
                 </select>
                 {errors.categoriaId && <div className="text-danger">{errors.categoriaId}</div>}
               </div>

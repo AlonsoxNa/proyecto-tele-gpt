@@ -21,8 +21,7 @@ const CrearAnuncio = () => {
     const fetchCategorias = async () => {
       //const response = await axios.get(`${API_URL}/categorias`);
       const response = await CategoriaService.obtenerCategorias()
-      console.log(response)
-      setCategorias(response.data);
+      setCategorias(response);
     };
     fetchCategorias();
   }, []);
@@ -105,6 +104,20 @@ const CrearAnuncio = () => {
     setExtension(fileExtension);
     validateField("multimedia", multimediaBase64);
     validateField("extension", fileExtension);
+  };
+
+  const handleImagenChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result.split(',')[1]; // Obtener solo el contenido base64 sin el prefijo
+        setMultimedia(base64String);
+        const fileExtension = file.name.split('.').pop();
+        setExtension(fileExtension);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -193,9 +206,11 @@ const CrearAnuncio = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="mediaUpload" className="form-label">Sube foto o video de la noticia</label>
-                <MediaUpload onFileChange={handleMultimediaChange} />
+                <input type="file" accept='.png,.jpg,.jpeg' onChange={handleImagenChange} className=""/>
                 {errors.multimedia && <div className="text-danger">{errors.multimedia}</div>}
                 {errors.extension && <div className="text-danger">{errors.extension}</div>}
+                <MediaUpload onUrlChange={handleMultimediaUrlChange} />
+                {errors.multimediaUrl && <div className="text-danger">{errors.multimediaUrl}</div>}
               </div>
               <div className="mb-3">
                 <label htmlFor="duracion" className="form-label">Duración en pantalla (segundos)</label>
