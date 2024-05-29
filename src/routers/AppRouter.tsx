@@ -6,6 +6,7 @@ import { Slider } from '../pages/Slider';
 import NoticiasOcultas from "../pages/NoticiasOcultas";
 import { Login } from '@/pages/Login';
 import { Layout } from '@/components/layout/Layout';
+import { PrivateRoute } from './PrivateRoute';
 
 export const router = createBrowserRouter( [
   {
@@ -22,7 +23,9 @@ export const router = createBrowserRouter( [
   },
   {
     path: "/admin/",
-    element: <Layout />,
+    element: <PrivateRoute>
+      <Layout />
+    </PrivateRoute>,
     children: [
       {
         path: "noticias",
