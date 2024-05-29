@@ -5,6 +5,7 @@ import Navbar from "@/Componentes/Navbar";
 import { SelecctorFechas } from "@/Componentes/SelecctorFechas";
 import MediaUpload from "../Componentes/MediaUpload";
 import NoticiaService from "../services/Noticias";
+import CategoriaService from "@/services/CategoriaService";
 
 const CrearAnuncio = () => {
   const [titulo, setTitulo] = useState("");
@@ -18,7 +19,9 @@ const CrearAnuncio = () => {
 
   useEffect(() => {
     const fetchCategorias = async () => {
-      const response = await axios.get(`${API_URL}/categorias`);
+      //const response = await axios.get(`${API_URL}/categorias`);
+      const response = await CategoriaService.obtenerCategorias()
+      console.log(response)
       setCategorias(response.data);
     };
     fetchCategorias();

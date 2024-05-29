@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "@/Componentes/Navbar";
 import MediaUpload from "../Componentes/MediaUpload";
 import NoticiaService from "../services/Noticias";
+import CategoriaService from "@/services/CategoriaService";
 
 const Solofoto = () => {
   const [titulo, setTitulo] = useState("");
@@ -16,8 +17,9 @@ const Solofoto = () => {
 
   useEffect(() => {
     const fetchCategorias = async () => {
-      const response = await axios.get(`${API_URL}/categorias`);
-      setCategorias(response.data);
+      //const response = await axios.get(`${API_URL}/categorias`);
+      const response = await CategoriaService.obtenerCategorias()
+      setCategorias(response);
     };
     fetchCategorias();
   }, []);
@@ -83,6 +85,20 @@ const Solofoto = () => {
     validateField("extension", ext);
   };
 
+  const handleImagenChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result.split(',')[1]; // Obtener solo el contenido base64 sin el prefijo
+        setMultimedia(base64String);
+        const fileExtension = file.name.split('.').pop();
+        setExtension(fileExtension);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleCategoriaChange = (e) => {
     const value = e.target.value;
     setCategoriaId(value);
@@ -91,7 +107,7 @@ const Solofoto = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const tipo = "Foto";
+    const tipo = "Multimedia";
 
     // Validate all fields before submitting
     validateField("titulo", titulo);
@@ -105,7 +121,12 @@ const Solofoto = () => {
       alert("Por favor corrige los errores antes de enviar el formulario.");
       return;
     }
-
+    // console.log("duracion: ",duracion)
+    // console.log("titulo: ",titulo)
+    // console.log("tipo: ",tipo)
+    // console.log("multimedia: ",multimedia)
+    // console.log("extension: ",extension)
+    // console.log("categoriaId: ",categoriaId)
     let response = await NoticiaService.registrarNoticiaFoto(duracion, titulo, tipo, multimedia, extension, categoriaId);
     if (response) {
       alert("Noticia foto registrada correctamente.");
@@ -165,7 +186,8 @@ const Solofoto = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="mediaUpload" className="form-label">Sube la foto</label>
-                <MediaUpload onFileChange={handleMultimediaChange} />
+                <input type="file" accept='.png,.jpg,.jpeg' onChange={handleImagenChange} className=""/>
+                {/* <MediaUpload onFileChange={handleMultimediaChange} /> */}
                 {errors.multimedia && <div className="text-danger">{errors.multimedia}</div>}
                 {errors.extension && <div className="text-danger">{errors.extension}</div>}
               </div>
