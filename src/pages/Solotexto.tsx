@@ -137,7 +137,9 @@ const Solotexto = () => {
                 ></textarea>
                 {errors.contenido && <div className="text-danger">{errors.contenido}</div>}
               </div>
-              <div className="mb-3">
+            </div>
+            <div className="col-md-6">
+            <div className="mb-3">
                 <label htmlFor="categoria" className="form-label">Elige la categoría</label>
                 <select 
                   id="categoria" 
@@ -152,8 +154,6 @@ const Solotexto = () => {
                 </select>
                 {errors.categoriaId && <div className="text-danger">{errors.categoriaId}</div>}
               </div>
-            </div>
-            <div className="col-md-6">
               <div className="mb-3">
                 <label htmlFor="fecha" className="form-label">Elige la fecha de la publicación</label>
                 <SelecctorFechas />
