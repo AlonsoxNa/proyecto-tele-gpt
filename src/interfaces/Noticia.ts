@@ -8,3 +8,12 @@ export interface Noticia {
   tipo: string;
   multimedia: string;
 }
+
+export interface ResponseCambiarEstadoNoticia {
+  status: number;
+  message?: string;
+  response: {
+    status: number;
+    message?: string;
+  };
+}

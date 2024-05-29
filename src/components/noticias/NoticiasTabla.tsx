@@ -1,14 +1,15 @@
-import { Alert, Backdrop, CircularProgress, Grid, IconButton, Snackbar, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Alert, Backdrop, Checkbox, CircularProgress, Grid, IconButton, Snackbar, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 // import './TablaSimplev2.css'; // Importa tu archivo CSS personalizado
+import { cambiarEstadoNoticiaAPI } from '@/services/noticiasService';
 import { useNoticiasStore } from '@/stores/noticias/noticias.store';
 import { useSelectNoticias } from '@/stores/noticias/selectNoticias.store';
+import { formatDate } from '@/utils/noticias/convertirFecha';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import { FC, useEffect, useState } from 'react';
-import { formatDate } from '@/utils/noticias/convertirFecha';
-import { cambiarEstadoNoticiaAPI } from '@/services/noticiasService';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { ResponseCambiarEstadoNoticia } from '@/interfaces/Noticia';
 
 
 export const NoticiasTabla: FC = () => {
@@ -16,7 +17,7 @@ export const NoticiasTabla: FC = () => {
   const [ isLoading, setIsLoading ] = useState( true );
   const noticiasFiltradas = useNoticiasStore( state => state.noticiasFiltradas );
   const fetchNoticias = useNoticiasStore( state => state.fetchNoticias );
-  const { noticiasSelected, handleAddNoticia } = useSelectNoticias();
+  const { noticiasSelected, handleAddNoticia, handleAddAll, handleClear } = useSelectNoticias();
 
   const [ openSnackbar, setOpenSnackbar ] = useState<boolean>( false );
   const [ messageSnackbar, setMessageSnackbar ] = useState<string>( "" );
@@ -34,7 +35,7 @@ export const NoticiasTabla: FC = () => {
   const handleChangeStatusNoticia = async ( id: string, status: boolean ) => {
     setIsLoading( true );
 
-    const response = await cambiarEstadoNoticiaAPI( id, !status );
+    const response: ResponseCambiarEstadoNoticia = await cambiarEstadoNoticiaAPI( id, !status ) as ResponseCambiarEstadoNoticia;
 
     if ( response?.status === 204 ) {
       setMessageSnackbar( `Has ${ status ? 'ocultado' : 'mostrado' } esta noticia correctamente` );
@@ -48,12 +49,27 @@ export const NoticiasTabla: FC = () => {
     setIsLoading( false );
   };
 
+  const handleChangeSelectAll = ( event: ChangeEvent<HTMLInputElement> ) => {
+    if ( event.target.checked ) {
+      handleAddAll( noticiasFiltradas );
+    } else {
+      handleClear();
+    }
+  };
+
   return (
     <TableContainer>
       <Table
-        sx={ { borderCollapse: 'collapse' } }>
+        sx={ { borderCollapse: 'collapse', mt: 2 } }>
         <TableHead>
           <TableRow>
+            <TableCell padding="checkbox">
+              <Checkbox
+                color="primary"
+                checked={ noticiasSelected.length > 0 && noticiasSelected.length === noticiasFiltradas.length }
+                onChange={ handleChangeSelectAll }
+              />
+            </TableCell>
             <TableCell>
               Noticia
             </TableCell>
@@ -63,6 +79,7 @@ export const NoticiasTabla: FC = () => {
             <TableCell>
               Acciones
             </TableCell>
+
           </TableRow>
         </TableHead>
 
@@ -70,14 +87,20 @@ export const NoticiasTabla: FC = () => {
           { noticiasFiltradas.map( ( row ) => (
             <TableRow
               key={ row.id }
-              onClick={ () => handleAddNoticia( row ) }
-              sx={ { cursor: 'pointer', backgroundColor: noticiasSelected.includes( row ) ? '#757ce8' : '', borderRadius: 1, overflow: 'hidden' } }
+              sx={ { backgroundColor: noticiasSelected.includes( row.id ) ? '#E4F4FD' : '', borderRadius: 1, overflow: 'hidden' } }
             >
+              <TableCell padding="checkbox">
+                <Checkbox
+                  color="primary"
+                  checked={ noticiasSelected.includes( row.id ) }
+                  onClick={ () => handleAddNoticia( row ) }
+                />
+              </TableCell>
               <TableCell >
                 <Grid
                   container
                   alignItems='center'
-                  sx={ { height: '3rem', borderRadius: '0.3rem', px: 2 } }
+                  sx={ { height: '3rem', borderRadius: '0.3rem' } }
                 >
                   { row.titulo }
                 </Grid>
@@ -109,7 +132,9 @@ export const NoticiasTabla: FC = () => {
                   <IconButton sx={ { width: 'auto', backgroundColor: '#c6def5' } } color="primary"> <ModeEditIcon /> </IconButton>
                 </Stack>
               </TableCell>
+
             </TableRow>
+
           ) ) }
         </TableBody>
       </Table>

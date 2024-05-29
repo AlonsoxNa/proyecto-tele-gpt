@@ -29,6 +29,19 @@ export const cambiarEstadoNoticiaAPI = async ( id: string, estado: boolean ) => 
 
     return response;
   } catch ( error ) {
-    return;
+    return error;
+  }
+};
+
+export const cambiarEstadoNoticiasAPI = async ( ids: string[], estado: boolean ) => {
+  try {
+    const response = await axios.patch( `${ API_URL }/noticia/cambiar-estado-list`, {
+      array: ids,
+      estado
+    } );
+
+    return response;
+  } catch ( error ) {
+    return error;
   }
 };

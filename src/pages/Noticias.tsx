@@ -1,4 +1,4 @@
-import { FiltrosNoticias } from '@/components/noticias/FiltrosNoticias';
+import { HeaderNoticiasTabla } from '@/components/noticias/HeaderNoticiasTabla';
 import { NoticiasTabla } from '@/components/noticias/NoticiasTabla';
 import { Grid } from '@mui/material';
 
@@ -9,7 +9,7 @@ export const Noticias = () => {
       <Grid container className="container">
 
         {/* Filtros de noticias */ }
-        <FiltrosNoticias />
+        <HeaderNoticiasTabla />
 
         {/* Tabla de noticias */ }
         <NoticiasTabla />

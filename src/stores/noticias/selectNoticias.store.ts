@@ -2,11 +2,13 @@ import { Noticia } from '@/interfaces/Noticia';
 import { create } from 'zustand';
 
 interface State {
-  noticiasSelected: Noticia[];
+  noticiasSelected: string[];
 }
 
 interface Actions {
   handleAddNoticia: ( noticia: Noticia ) => void;
+  handleAddAll: ( noticias: Noticia[] ) => void;
+  handleClear: () => void;
 }
 
 export const useSelectNoticias = create<State & Actions>()(
@@ -14,10 +16,20 @@ export const useSelectNoticias = create<State & Actions>()(
     noticiasSelected: [],
     handleAddNoticia: ( noticia: Noticia ) => {
       set( ( state ) => ( {
-        noticiasSelected: state.noticiasSelected.includes( noticia )
-          ? state.noticiasSelected.filter( ( item ) => item !== noticia )
-          : [ ...state.noticiasSelected, noticia ]
+        noticiasSelected: state.noticiasSelected.includes( noticia.id )
+          ? state.noticiasSelected.filter( ( item ) => item !== noticia.id )
+          : [ ...state.noticiasSelected, noticia.id ]
       } ) );
     },
+    handleAddAll( noticias: Noticia[] ) {
+      set( {
+        noticiasSelected: noticias.map( ( noticia ) => noticia.id )
+      } );
+    },
+    handleClear: () => {
+      set( {
+        noticiasSelected: []
+      } );
+    }
   } )
 );
