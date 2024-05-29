@@ -7,31 +7,31 @@ interface State {
     email: string;
     token: string;
     isLogged: boolean;
-  }
+  };
 }
 
 interface Actions {
-  handleLogin: (name:string, email: string, token: string) => void;
+  handleLogin: ( name: string, email: string, token: string ) => void;
   handleLogout: () => void;
 }
 
 export const useUserStore = create<State & Actions>()(
   persist(
-    (set) => ({
+    ( set ) => ( {
       user: {
         name: '',
         email: '',
         token: '',
-        isLogged: false 
+        isLogged: false
       },
-      handleLogin: (name:string, email: string, token: string) => {
-        set({ user: { name, email, token, isLogged: true } });
+      handleLogin: ( name: string, email: string, token: string ) => {
+        set( { user: { name, email, token, isLogged: true } } );
       },
       handleLogout() {
-        set({ user: { name: '', email: '', token: '', isLogged: false } });
-        localStorage.removeItem('user-storage');
+        set( { user: { name: '', email: '', token: '', isLogged: false } } );
+        localStorage.removeItem( 'user-info' );
       },
-    }), {
-    name: 'user-storage'
-  })
+    } ), {
+    name: 'user-info'
+  } )
 );

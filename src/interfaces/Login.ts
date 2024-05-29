@@ -5,7 +5,10 @@ export interface LoginFormData {
 
 export interface responseAuth {
   status: number;
-  data: string;
+  data: {
+    name: string;
+    token: string;
+  };
   response: {
     status: number;
   };
