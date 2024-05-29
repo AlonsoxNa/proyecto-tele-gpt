@@ -1,5 +1,6 @@
 import { Alert, Backdrop, Checkbox, CircularProgress, Grid, IconButton, Snackbar, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 // import './TablaSimplev2.css'; // Importa tu archivo CSS personalizado
+import { ResponseCambiarEstadoNoticia } from '@/interfaces/Noticia';
 import { cambiarEstadoNoticiaAPI } from '@/services/noticiasService';
 import { useNoticiasStore } from '@/stores/noticias/noticias.store';
 import { useSelectNoticias } from '@/stores/noticias/selectNoticias.store';
@@ -9,7 +10,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { ResponseCambiarEstadoNoticia } from '@/interfaces/Noticia';
+import { convertirTipoNoticia } from '@/utils/noticias/convertirTipoNoticia';
+import { estilosTipoNoticia } from '@/assets/noticias/tipoNoticia';
 
 
 export const NoticiasTabla: FC = () => {
@@ -50,6 +52,19 @@ export const NoticiasTabla: FC = () => {
     setIsLoading( false );
   };
 
+  // TODO: Implementar método para borrar noticia
+  /* const handleDeleteNoticia = async ( id: string ) => {
+    setIsLoading( true );
+
+
+    setIsLoading( false );
+  }; */
+
+  // TODO: Implementar método para redireccionar a vista para modificar noticia
+  /* const handleModificarNoticia = async ( noticia: Noticia ) => {
+    navigate( '/admin/noticias/modificar', { state: { noticia } } );
+  }; */
+
   const handleChangeSelectAll = ( event: ChangeEvent<HTMLInputElement> ) => {
     if ( event.target.checked ) {
       handleAddAll( noticiasFiltradas );
@@ -78,7 +93,9 @@ export const NoticiasTabla: FC = () => {
               Categoría
             </TableCell>
             <TableCell>
-              Tipo
+              <Grid container sx={ { pl: 0.8 } }>
+                Tipo
+              </Grid>
             </TableCell>
             <TableCell>
               Fecha
@@ -127,12 +144,19 @@ export const NoticiasTabla: FC = () => {
                 </Grid>
               </TableCell>
               <TableCell >
-                <Grid
-                  container
-                  alignItems='center'
-                  sx={ { height: '3rem', borderRadius: '0.3rem' } }
-                >
-                  { row.tipo }
+                <Grid container alignItems='center' sx={ { height: '3rem' } }>
+                  <Typography
+                    sx={ {
+                      width: 'auto',
+                      fontWeight: 400,
+                      fontSize: 14,
+                      p: 0.8,
+                      borderRadius: 3,
+                      backgroundColor: estilosTipoNoticia[ row.tipo ].backgroundColor,
+                      color: estilosTipoNoticia[ row.tipo ].textColor
+                    } }>
+                    { convertirTipoNoticia( row.tipo ) }
+                  </Typography>
                 </Grid>
               </TableCell>
               <TableCell>

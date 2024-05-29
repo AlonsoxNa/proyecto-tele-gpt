@@ -45,3 +45,14 @@ export const cambiarEstadoNoticiasAPI = async ( ids: string[], estado: boolean )
     return error;
   }
 };
+
+// TODO: Implementar llamada a la API para borrar noticia
+/* export const borrarNoticiaAPI = async ( id: string ) => {
+  try {
+    const response = await axios.delete( `${ API_URL }/noticia/borrar?id=${ id }` );
+
+    return response;
+  } catch ( error ) {
+    return error;
+  }
+}; */
