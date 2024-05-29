@@ -15,6 +15,7 @@ const CrearAnuncio = () => {
   const [duracion, setDuracion] = useState(0);
   const [multimedia, setMultimedia] = useState("");
   const [extension, setExtension] = useState("");
+  const [multimediaUrl, setMultimediaUrl] = useState("");
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const CrearAnuncio = () => {
       case "extension":
         if (!["png", "jpg", "jpeg"].includes(value)) {
           error = "Los tipos disponibles son: png, jpg y jpeg";
-        }
+        }      
         break;
       default:
         break;
@@ -97,13 +98,9 @@ const CrearAnuncio = () => {
     validateField("duracion", value);
   };
 
-  const handleMultimediaChange = (file: File, base64: string) => {
-    const multimediaBase64 = base64.split(",")[1]; // Extract the base64 string
-    const fileExtension = file.type.split("/")[1]; // Extract the file extension
-    setMultimedia(multimediaBase64);
-    setExtension(fileExtension);
-    validateField("multimedia", multimediaBase64);
-    validateField("extension", fileExtension);
+  const handleMultimediaUrlChange = (url) => {
+    setMultimediaUrl(url);
+    validateField("multimediaUrl", url);
   };
 
   const handleImagenChange = (event) => {
@@ -130,6 +127,7 @@ const CrearAnuncio = () => {
       tipo,
       multimedia,
       extension,
+      //multimediaUrl,
       categoriaId
     };
     
@@ -138,6 +136,7 @@ const CrearAnuncio = () => {
     validateField("categoriaId", categoriaId);
     validateField("duracion", duracion);
     validateField("multimedia", multimedia);
+    //validateField("multimediaUrl", multimediaUrl);
     validateField("extension", extension);
 
     const hasErrors = Object.values(errors).some(error => error);
@@ -209,8 +208,6 @@ const CrearAnuncio = () => {
                 <input type="file" accept='.png,.jpg,.jpeg' onChange={handleImagenChange} className=""/>
                 {errors.multimedia && <div className="text-danger">{errors.multimedia}</div>}
                 {errors.extension && <div className="text-danger">{errors.extension}</div>}
-                <MediaUpload onUrlChange={handleMultimediaUrlChange} />
-                {errors.multimediaUrl && <div className="text-danger">{errors.multimediaUrl}</div>}
               </div>
               <div className="mb-3">
                 <label htmlFor="duracion" className="form-label">Duración en pantalla (segundos)</label>

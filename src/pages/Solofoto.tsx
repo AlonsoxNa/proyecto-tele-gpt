@@ -76,15 +76,6 @@ const Solofoto = () => {
     validateField("duracion", value);
   };
 
-  const handleMultimediaChange = (file, base64) => {
-    const value = base64.split(",")[1]; // Extract the base64 string
-    const ext = file.type.split("/")[1]; // Extract the file extension
-    setMultimedia(value);
-    setExtension(ext);
-    validateField("multimedia", value);
-    validateField("extension", ext);
-  };
-
   const handleImagenChange = (event) => {
     const file = event.target.files[0];
     if (file) {
