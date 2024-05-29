@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "@/Componentes/Navbar";
@@ -10,17 +10,17 @@ const Solovideo = () => {
   const [titulo, setTitulo] = useState("");
   const [multimediaUrl, setMultimediaUrl] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
+  const [categorias, setCategorias] = useState([]);
+  const [duracion, setDuracion] = useState(0);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchCategorias = async () => {
-      //const response = await axios.get(`${API_URL}/categorias`);
-      const response = await CategoriaService.obtenerCategorias()
+      const response = await CategoriaService.obtenerCategorias();
       setCategorias(response);
     };
     fetchCategorias();
-    }, []);
-
+  }, []);
 
   const validateField = (field, value) => {
     let error = "";
@@ -35,13 +35,21 @@ const Solovideo = () => {
         }
         break;
       case "multimediaUrl":
+        const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
         if (!value) {
           error = "El URL del video es obligatorio";
+        } else if (!youtubeRegex.test(value)) {
+          error = "El URL debe ser un enlace válido de YouTube";
         }
         break;
       case "categoriaId":
         if (!value) {
           error = "La categoría es obligatoria";
+        }
+        break;
+      case "duracion":
+        if (value < 1 || value > 300) {
+          error = "La duración debe ser entre 1 y 300 segundos";
         }
         break;
       default:
@@ -56,15 +64,22 @@ const Solovideo = () => {
     validateField("titulo", value);
   };
 
-  const handleMultimediaUrlChange = (url) => {
-    setMultimediaUrl(url);
-    validateField("multimediaUrl", url);
+  const handleMultimediaUrlChange = (e) => {
+    const value = e.target.value;
+    setMultimediaUrl(value);
+    validateField("multimediaUrl", value);
   };
 
   const handleCategoriaChange = (e) => {
     const value = e.target.value;
     setCategoriaId(value);
     validateField("categoriaId", value);
+  };
+
+  const handleDuracionChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    setDuracion(value);
+    validateField("duracion", value);
   };
 
   const handleSubmit = async (e) => {
@@ -75,6 +90,7 @@ const Solovideo = () => {
     validateField("titulo", titulo);
     validateField("multimediaUrl", multimediaUrl);
     validateField("categoriaId", categoriaId);
+    validateField("duracion", duracion);
 
     const hasErrors = Object.values(errors).some(error => error);
     if (hasErrors) {
@@ -82,10 +98,14 @@ const Solovideo = () => {
       return;
     }
 
-    let response = await NoticiaService.registrarNoticiaVideo(duracion, titulo, tipo, multimediaUrl, categoriaId);
-    if (response) {
-      alert("Noticia video registrada correctamente.");
-    } else {
+    try {
+      const response = await NoticiaService.registrarNoticiaVideo({ duracion, titulo, tipo, multimediaUrl, categoriaId });
+      if (response) {
+        alert("Noticia video registrada correctamente.");
+      } else {
+        alert("Error al registrar la noticia video.");
+      }
+    } catch (error) {
       alert("Error al registrar la noticia video.");
     }
   };
@@ -126,9 +146,30 @@ const Solovideo = () => {
             </div>
             <div className="col-md-6">
               <div className="mb-3">
-                <label htmlFor="mediaUpload" className="form-label">Sube el video</label>
-                <MediaUpload onUrlChange={handleMultimediaUrlChange} />
+                <label htmlFor="mediaUrl" className="form-label">Ingresa la URL del video</label>
+                <input 
+                  type="text" 
+                  id="mediaUrl" 
+                  name="mediaUrl" 
+                  className="form-control" 
+                  value={multimediaUrl}
+                  onChange={handleMultimediaUrlChange} 
+                />
                 {errors.multimediaUrl && <div className="text-danger">{errors.multimediaUrl}</div>}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="duracion" className="form-label">Duración en pantalla (segundos)</label>
+                <input 
+                  type="number" 
+                  id="duracion" 
+                  className="form-control" 
+                  min="1" 
+                  max="300"
+                  step="1" 
+                  value={duracion} 
+                  onChange={handleDuracionChange} 
+                />
+                {errors.duracion && <div className="text-danger">{errors.duracion}</div>}
               </div>
             </div>
           </div>

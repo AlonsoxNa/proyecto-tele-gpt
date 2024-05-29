@@ -98,11 +98,6 @@ const CrearAnuncio = () => {
     validateField("duracion", value);
   };
 
-  const handleMultimediaUrlChange = (url) => {
-    setMultimediaUrl(url);
-    validateField("multimediaUrl", url);
-  };
-
   const handleImagenChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -127,7 +122,6 @@ const CrearAnuncio = () => {
       tipo,
       multimedia,
       extension,
-      //multimediaUrl,
       categoriaId
     };
     
@@ -136,7 +130,6 @@ const CrearAnuncio = () => {
     validateField("categoriaId", categoriaId);
     validateField("duracion", duracion);
     validateField("multimedia", multimedia);
-    //validateField("multimediaUrl", multimediaUrl);
     validateField("extension", extension);
 
     const hasErrors = Object.values(errors).some(error => error);
@@ -204,7 +197,7 @@ const CrearAnuncio = () => {
                 <SelecctorFechas />
               </div>
               <div className="mb-3">
-                <label htmlFor="mediaUpload" className="form-label">Sube foto o video de la noticia</label>
+                <label htmlFor="mediaUpload" className="form-label">Sube foto de la noticia</label>
                 <input type="file" accept='.png,.jpg,.jpeg' onChange={handleImagenChange} className=""/>
                 {errors.multimedia && <div className="text-danger">{errors.multimedia}</div>}
                 {errors.extension && <div className="text-danger">{errors.extension}</div>}
