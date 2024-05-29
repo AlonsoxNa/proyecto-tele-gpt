@@ -1,18 +1,34 @@
-import { Grid, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Alert, Backdrop, CircularProgress, Grid, IconButton, Snackbar, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 // import './TablaSimplev2.css'; // Importa tu archivo CSS personalizado
-import { useFiltroSearchStore } from '@/stores/noticias/filtroSearch.store';
+import { useNoticiasStore } from '@/stores/noticias/noticias.store';
 import { useSelectNoticias } from '@/stores/noticias/selectNoticias.store';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { formatDate } from '@/utils/noticias/convertirFecha';
 
 
 export const NoticiasTabla: FC = () => {
 
-  const { noticias } = useFiltroSearchStore();
+  const [ isLoading, setIsLoading ] = useState( true );
+  const noticiasFiltradas = useNoticiasStore( state => state.noticiasFiltradas );
+  const fetchNoticias = useNoticiasStore( state => state.fetchNoticias );
   const { noticiasSelected, handleAddNoticia } = useSelectNoticias();
+
+  const [ openSnackbar, setOpenSnackbar ] = useState<boolean>( false );
+  // const [ messageSnackbar, setMessageSnackbar ] = useState<string>( "" );
+  // const [ isError, setIsError ] = useState<boolean>( false );
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar( false );
+  };
+
+  useEffect( () => {
+    fetchNoticias();
+    setIsLoading( false );
+  }, [ fetchNoticias ] );
 
   return (
     <TableContainer>
@@ -33,7 +49,7 @@ export const NoticiasTabla: FC = () => {
         </TableHead>
 
         <TableBody>
-          { noticias.map( ( row ) => (
+          { noticiasFiltradas.map( ( row ) => (
             <TableRow
               key={ row.id }
               onClick={ () => handleAddNoticia( row ) }
@@ -58,7 +74,7 @@ export const NoticiasTabla: FC = () => {
                     px: 2
                   } }
                 >
-                  { row.fechaRegistro }
+                  { formatDate( row.fechaRegistro ) }
                 </Grid>
               </TableCell>
               <TableCell>
@@ -75,6 +91,23 @@ export const NoticiasTabla: FC = () => {
           ) ) }
         </TableBody>
       </Table>
+      {/* Loading */ }
+      <Backdrop
+        sx={ { color: '#fff', zIndex: ( theme ) => theme.zIndex.drawer + 1 } }
+        open={ isLoading }
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar open={ openSnackbar } autoHideDuration={ 6000 } onClose={ handleCloseSnackbar }>
+        <Alert
+          onClose={ handleCloseSnackbar }
+          // severity={ isError ? 'error' : 'success' }
+          variant="filled"
+          sx={ { width: '100%' } }
+        >
+          {/* { messageSnackbar } */ }
+        </Alert>
+      </Snackbar>
     </TableContainer >
   );
 };

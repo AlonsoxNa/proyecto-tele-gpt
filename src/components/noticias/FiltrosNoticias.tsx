@@ -1,4 +1,4 @@
-import { useFiltroSearchStore } from '@/stores/noticias/filtroSearch.store';
+import { useNoticiasStore } from '@/stores/noticias/noticias.store';
 import { useSelectNoticias } from '@/stores/noticias/selectNoticias.store';
 import { AddCircle } from '@mui/icons-material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
@@ -9,7 +9,7 @@ import { ChangeEvent, FC } from 'react';
 
 export const FiltrosNoticias: FC = () => {
 
-  const { handleChangeFiltroSearch, handleChangeFiltroStatus, filtroSearch, filtroStatus } = useFiltroSearchStore();
+  const { handleChangeFiltroSearch, handleChangeFiltroStatus, filtroSearch, filtroStatus } = useNoticiasStore();
   const { noticiasSelected } = useSelectNoticias();
 
   const handleChangeStatusNoticia = ( { target }: SelectChangeEvent ) => {

@@ -1,46 +1,56 @@
-import { noticias } from '@/assets/data/noticiasTemporal';
 import { Noticia } from '@/interfaces/Noticia';
+import { getNoticiasAPI } from '@/services/noticiasService';
 import { create } from 'zustand';
 
 interface State {
   filtroStatus: string;
   filtroSearch: string;
   noticias: Noticia[];
+  noticiasFiltradas: Noticia[];
 }
 
 interface Actions {
   handleChangeFiltroSearch: ( filtro: string ) => void;
   handleChangeFiltroStatus: ( filtro: string ) => void;
+  fetchNoticias: () => void;
 }
 
-export const useFiltroSearchStore = create<State & Actions>()(
+export const useNoticiasStore = create<State & Actions>()(
   ( set ) => ( {
     filtroSearch: '',
-    noticias: noticias,
+    noticias: [],
+    noticiasFiltradas: [],
     filtroStatus: 'Todas',
     handleChangeFiltroSearch: ( filtro: string ) => {
-      set( {
+      set( state => ( {
         filtroSearch: filtro,
         filtroStatus: 'Todas',
-        noticias: noticias.filter( ( noticia ) => {
+        noticiasFiltradas: state.noticias.filter( ( noticia ) => {
           return noticia.titulo.toLowerCase().includes( filtro.toLowerCase() );
         } )
-      } );
+      } ) );
     },
     handleChangeFiltroStatus: ( filtro ) => {
-      set( {
+      set( state => ( {
         filtroSearch: '',
         filtroStatus: filtro,
-        noticias: noticias.filter( ( noticia ) => {
+        noticiasFiltradas: state.noticias.filter( ( noticia ) => {
           if ( filtro === 'Todas' ) {
-            return noticias;
+            return state.noticias;
           } else if ( filtro === 'Disponibles' ) {
             return noticia.habilitado;
           } else if ( filtro === 'Ocultas' ) {
             return !noticia.habilitado;
           }
         } )
-      } );
+      } ) );
     },
+    fetchNoticias: async () => {
+      const response = await getNoticiasAPI();
+      set( {
+        noticias: response,
+        noticiasFiltradas: response
+      } );
+    }
   } )
 );
