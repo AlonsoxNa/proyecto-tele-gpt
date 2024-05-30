@@ -154,10 +154,10 @@ const Solotexto = () => {
                 </select>
                 {errors.categoriaId && <div className="text-danger">{errors.categoriaId}</div>}
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="fecha" className="form-label">Elige la fecha de la publicación</label>
                 <SelecctorFechas />
-              </div>
+              </div> */}
               <div className="mb-3">
                 <label htmlFor="duracion" className="form-label">Duración en pantalla (segundos)</label>
                 <input 

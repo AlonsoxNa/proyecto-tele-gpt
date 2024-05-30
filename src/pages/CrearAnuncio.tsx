@@ -191,10 +191,10 @@ const CrearAnuncio = () => {
                 </select>
                 {errors.categoriaId && <div className="text-danger">{errors.categoriaId}</div>}
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="fecha" className="form-label">Elige la fecha de la noticia</label>
                 <SelecctorFechas />
-              </div>
+              </div> */}
               <div className="mb-3">
                 <label htmlFor="mediaUpload" className="form-label">Sube foto de la noticia</label>
                 <input type="file" accept='.png,.jpg,.jpeg' onChange={handleImagenChange} className=""/>

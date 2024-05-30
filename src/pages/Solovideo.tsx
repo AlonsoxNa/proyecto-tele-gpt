@@ -99,7 +99,7 @@ const Solovideo = () => {
     }
 
     try {
-      const response = await NoticiaService.registrarNoticiaVideo({ duracion, titulo, tipo, multimediaUrl, categoriaId });
+      const response = await NoticiaService.registrarNoticiaVideo(duracion, titulo, tipo, multimediaUrl, categoriaId);
       if (response) {
         alert("Noticia video registrada correctamente.");
       } else {
