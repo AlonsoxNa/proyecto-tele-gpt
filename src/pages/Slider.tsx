@@ -6,7 +6,6 @@ export const Slider = () => {
     <div className="container-slider h-full">
       <NavbarInicio />
       <Carrusel />
-      {/* <Carrusel2  slides={slides}/> */}
     </div>
   );
 };
