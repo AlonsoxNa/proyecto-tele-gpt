@@ -1,13 +1,26 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
+import { useUserStore } from '@/stores/user.store';
 
-interface Navbar{
-  nombreUsuario:string;
-}
+const Navbar = () => {
 
+  const { user } = useUserStore();
 
-const Navbar = ({ nombreUsuario = 'Anonimo' }:Navbar ) => {
+  return (
+    <div style={ { marginBottom: '2rem' } }>
+      <nav className='navbar navbar-expand-lg custom-navbar-color'>
+        <div className='container-fluid'>
+          <button
+            className='navbar-toggler'
+            data-bs-toggle='collapse'
+            data-bs-target='#navbarNavAltMarkup'
+            aria-controls='navbarNavAltMarkup'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
+          >
+            <span className='navbar-toggler-icon' />
+          </button>
 
     return (
         <div style={{ marginBottom: '2rem' }}>
