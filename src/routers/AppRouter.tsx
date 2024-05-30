@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import { HomeTemporal } from '../pages/HomeTemporal';
-import { CrearAnuncio } from '../pages/CrearAnuncio';
-import { Solofoto } from '../pages/Solofoto';
-import { Solovideo } from '../pages/Solovideo';
-import { Solotexto } from '../pages/Solotexto';
+import CrearAnuncio from '../pages/CrearAnuncio';
+import Solofoto from '../pages/Solofoto';
+import Solovideo from '../pages/Solovideo';
+import Solotexto from '../pages/Solotexto';
 import  Ayuda  from '../pages/Ayuda';
 import { Dashboard } from '../pages/Dashboard';
 import { Slider } from '../pages/Slider';
