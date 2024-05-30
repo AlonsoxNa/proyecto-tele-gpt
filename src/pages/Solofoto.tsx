@@ -128,7 +128,6 @@ const Solofoto = () => {
 
   return (
     <>
-      <Navbar nombreUsuario="Anónimo" />
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
           <div className="row">

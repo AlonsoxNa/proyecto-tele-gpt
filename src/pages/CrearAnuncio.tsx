@@ -147,7 +147,6 @@ const CrearAnuncio = () => {
 
   return (
     <>
-      <Navbar nombreUsuario="Anonimo" />
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
           <div className="row">

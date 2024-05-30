@@ -47,7 +47,7 @@ export const LoginForm: FC = () => {
       if ( response.status === 200 ) {
         handleLogin( response.data.name, form.email, response.data.token );
         handleCloseLoading();
-        navigate( '/home' );
+        navigate( '/admin/noticias' );
       } else if ( response.response.status === 204 ) {
         setMessageSnackbar( "El usuario no existe" );
       } else if ( response.response.status === 409 ) {

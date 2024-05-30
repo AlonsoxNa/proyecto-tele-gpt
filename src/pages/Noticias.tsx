@@ -6,7 +6,7 @@ export const Noticias = () => {
 
   return (
     <>
-      <Grid container className="container">
+      <Grid container className="container" sx={{mt:"1rem"}}>
 
         {/* Filtros de noticias */ }
         <HeaderNoticiasTabla />

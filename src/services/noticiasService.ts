@@ -1,7 +1,7 @@
 import { useUserStore } from '@/stores/user.store';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_BASE_URL;
+const API_URL = import.meta.env.VITE_API_ENDPOINT;
 const token = useUserStore.getState().user.token;
 
 export const getNoticiasAPI = async () => {
