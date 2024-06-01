@@ -9,24 +9,26 @@ interface ErrorValidation {
 }
 
 interface FormErrors {
-  [key: string]: string;
+  [ key: string ]: string;
 }
 
-export const useForm = <T extends object>(initialState: T) => {
-  
-  const [ errors, setErrors ] = useState<FormErrors>({});
-  const [form, setForm] = useState(initialState);
 
-  const handleChange = ({target}: ChangeEvent<HTMLInputElement>) => {
+export const useForm = <T extends object>( initialState: T ) => {
+
+  const [ errors, setErrors ] = useState<FormErrors>( {} );
+  const [ form, setForm ] = useState( initialState );
+
+  const handleChange = ( { target }: ChangeEvent<HTMLInputElement> ) => {
     const { name, value } = target;
 
-    setForm({
+    setForm( {
       ...form,
-      [name]: value
-    })
+      [ name ]: value
+    } );
+    handleValidate( name );
   };
 
-  const handleValidate = async () => {
+  const handleValidateAll = async () => {
     try {
       await userSchema.validate( form, { abortEarly: false } );
     } catch ( error: unknown ) {
@@ -38,14 +40,39 @@ export const useForm = <T extends object>(initialState: T) => {
       setErrors( newError );
       return newError;
     }
-    setErrors({});
+    setErrors( {} );
     return [];
+  };
+
+  const handleValidate = async ( name: string ) => {
+
+    try {
+      await userSchema.validate( form, { abortEarly: false } );
+      setErrors( {
+        ...errors,
+        [ name ]: ''
+      } );
+    } catch ( error ) {
+      let newError: string = '';
+
+      ( error as ErrorValidation ).inner.some( ( err: { path: string; message: string; } ) => {
+        if ( err.path === name ) {
+          newError = err.message;
+          return true;
+        }
+      } );
+      setErrors( {
+        ...errors,
+        [ name ]: newError
+      } );
+    }
   };
 
   return {
     form,
     handleChange,
     errors,
+    handleValidateAll,
     handleValidate
-  }
-}
+  };
+};

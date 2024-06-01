@@ -3,18 +3,15 @@ import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "@/Componentes/Navbar";
 import { SelecctorFechas } from "@/Componentes/SelecctorFechas";
-import MediaUpload from "../Componentes/MediaUpload";
 import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
 
-const CrearAnuncio = () => {
+const Solotexto = () => {
   const [titulo, setTitulo] = useState("");
   const [contenido, setContenido] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
   const [categorias, setCategorias] = useState([]);
   const [duracion, setDuracion] = useState(0);
-  const [multimedia, setMultimedia] = useState("");
-  const [extension, setExtension] = useState("");
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -24,7 +21,7 @@ const CrearAnuncio = () => {
       setCategorias(response);
     };
     fetchCategorias();
-  }, []);
+    }, []);
 
   const validateField = (field, value) => {
     let error = "";
@@ -57,16 +54,6 @@ const CrearAnuncio = () => {
           error = "La duración debe ser entre 1 y 300 segundos";
         }
         break;
-      case "multimedia":
-        if (!value) {
-          error = "El archivo multimedia es obligatorio";
-        }
-        break;
-      case "extension":
-        if (!["png", "jpg", "jpeg"].includes(value)) {
-          error = "Los tipos disponibles son: png, jpg y jpeg";
-        }      
-        break;
       default:
         break;
     }
@@ -97,39 +84,15 @@ const CrearAnuncio = () => {
     validateField("duracion", value);
   };
 
-  const handleImagenChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result.split(',')[1]; // Obtener solo el contenido base64 sin el prefijo
-        setMultimedia(base64String);
-        const fileExtension = file.name.split('.').pop();
-        setExtension(fileExtension);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const tipo = "Normal";
-    const data = {
-      duracion,
-      titulo,
-      contenido,
-      tipo,
-      multimedia,
-      extension,
-      categoriaId
-    };
-    
+    const tipo = "Publicacion";
+
+    // Validate all fields before submitting
     validateField("titulo", titulo);
     validateField("contenido", contenido);
     validateField("categoriaId", categoriaId);
     validateField("duracion", duracion);
-    validateField("multimedia", multimedia);
-    validateField("extension", extension);
 
     const hasErrors = Object.values(errors).some(error => error);
     if (hasErrors) {
@@ -137,11 +100,11 @@ const CrearAnuncio = () => {
       return;
     }
 
-    let response = await NoticiaService.registrarNoticiaNormal(duracion, titulo, contenido, tipo, multimedia, extension, categoriaId);
+    let response = await NoticiaService.registrarNoticiaPublicacion(duracion, titulo, contenido, tipo, categoriaId);
     if (response) {
-      alert("Noticia registrada correctamente.");
+      alert("Noticia publicación registrada correctamente.");
     } else {
-      alert("Error al registrar la noticia.");
+      alert("Error al registrar la noticia publicación.");
     }
   };
 
@@ -152,7 +115,7 @@ const CrearAnuncio = () => {
           <div className="row">
             <div className="col-md-6">
               <div className="mb-3">
-                <label htmlFor="titulo1" className="form-label">Ingresa título de la noticia</label>
+                <label htmlFor="titulo1" className="form-label">Ingresa título de la publicación</label>
                 <input 
                   type="text" 
                   id="titulo1" 
@@ -163,7 +126,7 @@ const CrearAnuncio = () => {
                 {errors.titulo && <div className="text-danger">{errors.titulo}</div>}
               </div>
               <div className="mb-3">
-                <label htmlFor="descripcion" className="form-label">Ingresa contenido de la noticia</label>
+                <label htmlFor="descripcion" className="form-label">Ingresa contenido de la publicación</label>
                 <textarea 
                   id="descripcion" 
                   className="form-control" 
@@ -191,15 +154,9 @@ const CrearAnuncio = () => {
                 {errors.categoriaId && <div className="text-danger">{errors.categoriaId}</div>}
               </div>
               {/* <div className="mb-3">
-                <label htmlFor="fecha" className="form-label">Elige la fecha de la noticia</label>
+                <label htmlFor="fecha" className="form-label">Elige la fecha de la publicación</label>
                 <SelecctorFechas />
               </div> */}
-              <div className="mb-3">
-                <label htmlFor="mediaUpload" className="form-label">Sube foto de la noticia</label>
-                <input type="file" accept='.png,.jpg,.jpeg' onChange={handleImagenChange} className=""/>
-                {errors.multimedia && <div className="text-danger">{errors.multimedia}</div>}
-                {errors.extension && <div className="text-danger">{errors.extension}</div>}
-              </div>
               <div className="mb-3">
                 <label htmlFor="duracion" className="form-label">Duración en pantalla (segundos)</label>
                 <input 
@@ -216,11 +173,11 @@ const CrearAnuncio = () => {
               </div>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary">Crear Noticia</button>
+          <button type="submit" className="btn btn-primary">Crear Publicación</button>
         </form>
       </div>
     </>
   );
 };
 
-export default CrearAnuncio;
+export default Solotexto;

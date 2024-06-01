@@ -1,39 +1,63 @@
 import { useForm } from '@/hooks/useForm';
+import { LoginFormData, responseAuth } from '@/interfaces/Login';
 import { useUserStore } from '@/stores/user.store';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Button, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Alert, Backdrop, Button, CircularProgress, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { FC, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-interface FormData {
-  email: string;
-  password: string;
-}
+import { login } from '@/services/authServices';
+import { Snackbar } from '@mui/material';
 
 export const LoginForm: FC = () => {
 
   const navigate = useNavigate();
+  const { handleLogin } = useUserStore();
 
-  const { form, errors, handleChange, handleValidate } = useForm<FormData>( {
+  const { form, errors, handleChange, handleValidateAll, handleValidate } = useForm<LoginFormData>( {
     email: '',
     password: ''
   } );
 
   const [ showPassword, setShowPassword ] = useState( false );
 
+  const [ isLoading, setIsLoading ] = useState( false );
+
+  // Snackbar
+  const [ openSnackbar, setOpenSnackbar ] = useState<boolean>( false );
+  const [ messageSnackbar, setMessageSnackbar ] = useState<string>( "" );
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar( false );
+  };
+
   const handleClickShowPassword = () => setShowPassword( ( show ) => !show );
 
-  const { handleLogin } = useUserStore();
+  const handleCloseLoading = () => {
+    setIsLoading( false );
+  };
 
   const handleSubmit = async ( e: FormEvent<HTMLFormElement> ) => {
+    setIsLoading( true );
     e.preventDefault();
 
-    const errors = await handleValidate();
+    const errors = await handleValidateAll();
     if ( errors.length === 0 ) {
-      handleLogin( form.email, form.password );
-      navigate( '/home' );
-    }
+      const response: responseAuth = await login( form.email, form.password ) as responseAuth;
 
+      if ( response.status === 200 ) {
+        handleLogin( response.data.name, form.email, response.data.token );
+        handleCloseLoading();
+        navigate( '/admin/noticias' );
+      } else if ( response.response.status === 204 ) {
+        setMessageSnackbar( "El usuario no existe" );
+      } else if ( response.response.status === 409 ) {
+        setMessageSnackbar( "Correo o contraseña incorrectos" );
+      } else {
+        setMessageSnackbar( "Error al iniciar sesión" );
+      }
+      setOpenSnackbar( true );
+    }
+    handleCloseLoading();
   };
 
   return (
@@ -53,7 +77,7 @@ export const LoginForm: FC = () => {
               value={ form.email }
               onChange={ handleChange }
               helperText={ errors.email }
-              onBlur={ handleValidate }
+              onBlur={ ( e ) => handleValidate( e.target.name ) }
               fullWidth
             />
           </Grid>
@@ -78,7 +102,7 @@ export const LoginForm: FC = () => {
               label="Contraseña"
               value={ form.password }
               onChange={ handleChange }
-              onBlur={ handleValidate }
+              onBlur={ ( e ) => handleValidate( e.target.name ) }
               fullWidth
             />
           </Grid>
@@ -87,12 +111,30 @@ export const LoginForm: FC = () => {
               variant="contained"
               type="submit"
               sx={ { width: 'auto' } }
+              disabled={ isLoading }
             >Iniciar sesión</Button>
           </Grid>
         </Grid>
 
       </form>
 
+      {/* Loading */ }
+      <Backdrop
+        sx={ { color: '#fff', zIndex: ( theme ) => theme.zIndex.drawer + 1 } }
+        open={ isLoading }
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar open={ openSnackbar } autoHideDuration={ 6000 } onClose={ handleCloseSnackbar }>
+        <Alert
+          onClose={ handleCloseSnackbar }
+          severity="error"
+          variant="filled"
+          sx={ { width: '100%' } }
+        >
+          { messageSnackbar }
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 };
