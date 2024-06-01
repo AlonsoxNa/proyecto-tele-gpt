@@ -22,10 +22,6 @@ export const router = createBrowserRouter( [
     path: "/login",
     element: <Login />
   },
-  // {
-  //   path: "/admin",
-  //   element: <Dashboard />,
-  // },
   {
     path: "/admin/",
     element: <PrivateRoute> <Layout /> </PrivateRoute>,
@@ -50,16 +46,17 @@ export const router = createBrowserRouter( [
         path: "Solotexto",
         element: <Solotexto />,
       }
+      ,{
+        path: "Ayuda",
+        element: <Ayuda />,
+      }
     ]
   },
   {
     path: '/slider',
     element: <Slider />
   },
-  {
-    path: "/Ayuda",
-    element: <Ayuda />,
-  },
+  
   {
     path: '/NoticiasOcultas',
     element: <NoticiasOcultas />
