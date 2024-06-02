@@ -1,0 +1,28 @@
+
+
+.contenedor-titulo {
+    width: 100%;
+    border-top: #009A8C solid ;
+    border-bottom: #009A8C solid ;
+    white-space: nowrap;
+    height: 13vh;
+    max-height: 13vh;
+    overflow: hidden;
+    display: flex;
+}
+  
+.cinta-titulo {
+    font-size: 9.5vh;
+    height: max-content;
+    align-items: center;
+    display: flex;
+    animation: marquee 1500s linear infinite;
+}
+.contenedor-icon{
+    z-index: 2;
+}
+
+@keyframes marquee {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); }
+}

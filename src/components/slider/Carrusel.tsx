@@ -1,7 +1,7 @@
 import { useEffect,useRef, useState } from 'react';
 import NoticiaService from '@/services/Noticias';
-import "./CintaNoticia.css";
 import "./Carrusel.css";
+import CintaNoticas from '../cinta/CintaNoticias';
 
 interface Noticia {
   categoriaId:string,
@@ -127,7 +127,7 @@ export const Carrusel = () => {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-100 h-100">
       {
         noticias.length==0?
         <>
@@ -198,22 +198,7 @@ export const Carrusel = () => {
                             </>
                           }
                         </div>
-                        {
-                          noticia.contenido && noticia.tipo!=='Publicacion'?
-                          <>
-                            <div className='contenedor-titulo'>  
-                              <h1 className='cinta-titulo'>
-                                {noticia.contenido}
-                              </h1>
-                            </div>
-                          </>
-                          :
-                          <>
-                          </>
-                        }
                     </div>
-                    
-                    
                   </>
                 ))
               }
@@ -227,22 +212,6 @@ export const Carrusel = () => {
               <span className="visually-hidden">Next</span>
             </button>
           </div>
-          {/* <div className='w-full descripcion-container justify-content-center flex'>
-            {
-              noticias.map((noticia,index)=>(
-                  noticia.contenido?
-                  <>
-                  <div className='contenedor-titulo'>  
-                    <h1 className='cinta-titulo'>
-                      Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen.
-                    </h1>
-                  </div> 
-                  </>
-                  :
-                  <></>
-              ))
-            }
-          </div> */}
         </>
         }
       

@@ -43,8 +43,8 @@ const CrearAnuncio = () => {
           error = "El contenido es obligatorio";
         } else if (value.length < 5) {
           error = "El contenido debe tener un mínimo de 5 caracteres";
-        } else if (value.length > 1024) {
-          error = "El contenido debe tener un máximo de 1024 caracteres";
+        } else if (value.length > 500) {
+          error = "El contenido debe tener un máximo de 500 caracteres";
         }
         break;
       case "categoriaId":
