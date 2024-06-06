@@ -1,7 +1,7 @@
 import { Alert, Backdrop, Checkbox, CircularProgress, Grid, IconButton, Snackbar, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 // import './TablaSimplev2.css'; // Importa tu archivo CSS personalizado
 import { ResponseCambiarEstadoNoticia } from '@/interfaces/Noticia';
-import { cambiarEstadoNoticiaAPI } from '@/services/noticiasService';
+import { borrarNoticiaAPI, cambiarEstadoNoticiaAPI } from '@/services/noticiasService';
 import { useNoticiasStore } from '@/stores/noticias/noticias.store';
 import { useSelectNoticias } from '@/stores/noticias/selectNoticias.store';
 import { formatDate } from '@/utils/noticias/convertirFecha';
@@ -53,12 +53,19 @@ export const NoticiasTabla: FC = () => {
   };
 
   // TODO: Implementar método para borrar noticia
-  /* const handleDeleteNoticia = async ( id: string ) => {
+  const handleDeleteNoticia = async ( id: string ) => {
     setIsLoading( true );
-
-
+    const response = await borrarNoticiaAPI(id)
+    if (response.success){
+      setMessageSnackbar( `Has eliminado la noticia correctamente` );
+      setIsError( false );
+      fetchNoticias();
+    }else{
+      setMessageSnackbar( `Error al eliminar la noticia, ${response.message}` );
+      setIsError( true );
+    }
     setIsLoading( false );
-  }; */
+  };
 
   // TODO: Implementar método para redireccionar a vista para modificar noticia
   /* const handleModificarNoticia = async ( noticia: Noticia ) => {
@@ -189,7 +196,9 @@ export const NoticiasTabla: FC = () => {
               <TableCell>
 
                 <Stack direction="row" spacing={ 1 }>
-                  <IconButton sx={ { width: 'auto', backgroundColor: '#ffc6ba' } } color="error" ><DeleteIcon /></IconButton>
+                  <IconButton sx={ { width: 'auto', backgroundColor: '#ffc6ba' } } color="error" 
+                  onClick={ () => handleDeleteNoticia(row.id) }
+                  ><DeleteIcon /></IconButton>
                   <IconButton
                     sx={ { width: 'auto', backgroundColor: row.habilitado ? '#ffc6ba' : '#c7ffc9' } }
                     color={ row.habilitado ? 'error' : 'success' }

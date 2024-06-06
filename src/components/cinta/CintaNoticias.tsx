@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from "axios";
 import "./CintaNoticia.css";
 import NewspaperIcon from '@mui/icons-material/Newspaper';
-import { Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 
 function CintaNoticas() {
     const [listedNews, setState] = useState([]); //lista con noticias
@@ -23,7 +23,10 @@ function CintaNoticas() {
         setString(`${stringNews}${" NOTICIAS: "}${listedNews.join(' | ')}`)
         setState([])
     };
-
+    useEffect(()=>{
+        getNews(requestNewsCurico); 
+        getNews(requestNewsCountry);        
+    },[])
     useEffect(()=>{
         const timer = () => {
           return setTimeout(() => {
@@ -33,13 +36,12 @@ function CintaNoticas() {
         };
         // Iniciar el temporizador cuando el componente se monte
         timer();
-      },[])
-
+    },[])
     return (
         <div className='contenedor-titulo'>
-            <Container sx={{backgroundColor:'#009A8C',zIndex:'3'}}>
+            <Box sx={{backgroundColor:'#009A8C',zIndex:'3'}}>
                 <NewspaperIcon sx={{fontSize:'12vh',color:'white'}} />
-            </Container>
+            </Box>
             <h1 className='cinta-titulo'>
                 {stringNews}
             </h1>
