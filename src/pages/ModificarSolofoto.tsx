@@ -1,10 +1,9 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from "@/Componentes/Navbar";
-import MediaUpload from "../Componentes/MediaUpload";
 import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
+import { useLocation } from "react-router-dom";
+import CustomizedSnackbars from "@/components/shared/Snackbar";
 
 const ModificarSolofoto = () => {
   const [titulo, setTitulo] = useState("");
@@ -15,13 +14,36 @@ const ModificarSolofoto = () => {
   const [categorias, setCategorias] = useState([]);
   const [errors, setErrors] = useState({});
 
+  const [msgAlert,setMsgAlert] = useState('')
+  const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
+  const [open, setOpen] = useState(false);
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const location = useLocation()
+  const id = location.state.id;
+
+  const getInfo = async () => {
+    const response = await NoticiaService.obtenerNoticiaPorId(id)
+    setTitulo(response.titulo)
+    setCategoriaId(response.categoriaId)
+    setDuracion(response.duracion)
+    setMultimedia(response.multimedia)
+    setExtension(response.extension)
+  }
+  const fetchCategorias = async () => {
+    //const response = await axios.get(`${API_URL}/categorias`);
+    const response = await CategoriaService.obtenerCategorias()
+    setCategorias(response);
+  };
+
   useEffect(() => {
-    const fetchCategorias = async () => {
-      //const response = await axios.get(`${API_URL}/categorias`);
-      const response = await CategoriaService.obtenerCategorias()
-      setCategorias(response);
-    };
     fetchCategorias();
+    getInfo();
   }, []);
 
   const validateField = (field, value) => {
@@ -98,7 +120,6 @@ const ModificarSolofoto = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const id;
 
     // Validate all fields before submitting
     validateField("titulo", titulo);
@@ -109,7 +130,9 @@ const ModificarSolofoto = () => {
 
     const hasErrors = Object.values(errors).some(error => error);
     if (hasErrors) {
-      alert("Por favor corrige los errores antes de enviar el formulario.");
+      setMsgAlert("Por favor corrige los errores antes de enviar el formulario.")
+      setSeverityAlert("warning")
+      setOpen(true)
       return;
     }
     // console.log("duracion: ",duracion)
@@ -119,15 +142,20 @@ const ModificarSolofoto = () => {
     // console.log("extension: ",extension)
     // console.log("categoriaId: ",categoriaId)
     let response = await NoticiaService.modificarNoticiaFoto(id, duracion, titulo, multimedia, extension, categoriaId);
-    if (response) {
-      alert("Modificar noticia foto registrada correctamente.");
-    } else {
-      alert("Error al modificar la noticia foto.");
+    if (response.success){
+      setMsgAlert(response.message)
+      setSeverityAlert("success")
+      setOpen(true)
+    }else{
+      setMsgAlert(response.message)
+      setSeverityAlert("error")
+      setOpen(true)
     }
   };
 
   return (
     <>
+      <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
           <div className="row">

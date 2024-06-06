@@ -32,26 +32,26 @@ const NoticiasOcultas = () => {
   };
 
     const datosResultadospostula = [
-      {
-        id:1,
-        Noticia:'La flaca se comio un conejo',
-        Fecha:'2024-01-12',
-        BotonBorrar: {
-          titulo: 'Eliminar',
-          funcion: () => 
-        },
-        BotonOcultar: {
-          titulo: 'Ocultar',
-          funcion: () => {
-            console.log("Ocultar")
-          }
-        },
-        BotonModificar: {
-          titulo: 'Modificar',
-          funcion: () => handleModificarNoticia(id)
-        },
+      // {
+      //   id:1,
+      //   Noticia:'La flaca se comio un conejo',
+      //   Fecha:'2024-01-12',
+      //   BotonBorrar: {
+      //     titulo: 'Eliminar',
+      //     funcion: () => 
+      //   },
+      //   BotonOcultar: {
+      //     titulo: 'Ocultar',
+      //     funcion: () => {
+      //       console.log("Ocultar")
+      //     }
+      //   },
+      //   BotonModificar: {
+      //     titulo: 'Modificar',
+      //     funcion: () => handleModificarNoticia(id)
+      //   },
   
-      },
+      // },
 
     ]
 

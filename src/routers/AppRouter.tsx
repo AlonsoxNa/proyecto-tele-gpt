@@ -12,6 +12,10 @@ import NoticiasOcultas from "../pages/NoticiasOcultas";
 import { Login } from '@/pages/Login';
 import { Layout } from '@/components/layout/Layout';
 import { PrivateRoute } from './PrivateRoute';
+import ModificarNoticiaNormal from "@/pages/ModificarNoticiaNormal";
+import ModificarSolofoto from "@/pages/ModificarSolofoto";
+import ModificarSolovideo from "@/pages/ModificarSolovideo";
+import ModificarSolotexto from "@/pages/ModificarSolotexto";
 
 export const router = createBrowserRouter( [
   {
@@ -45,6 +49,18 @@ export const router = createBrowserRouter( [
       {
         path: "Solotexto",
         element: <Solotexto />,
+      },{
+        path: "modificar-normal",
+        element: <ModificarNoticiaNormal />,
+      },{
+        path: "modificar-foto",
+        element: <ModificarSolofoto />,
+      },{
+        path: "modificar-video",
+        element: <ModificarSolovideo />,
+      },{
+        path: "modificar-texto",
+        element: <ModificarSolotexto />,
       }
       ,{
         path: "Ayuda",

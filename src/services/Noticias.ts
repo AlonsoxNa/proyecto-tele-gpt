@@ -52,7 +52,7 @@ const NoticiaService ={
     },
     modificarNoticiaNormal: async (id : string, duracion: number, titulo: string, contenido : string, multimedia : string, extension : string, categoriaId : string ) => {
         try {
-            const response = await axios.patch(`${API_URL}/noticia/modificar-noticia-normal`, {
+            const response = await axios.patch(`${API_URL}/noticia/modificar-noticia-normal?id=${id}`, {
 
                 duracion, titulo, contenido, multimedia, extension, categoriaId
             }, {
@@ -60,22 +60,29 @@ const NoticiaService ={
                     Authorization: `Bearer ${useUserStore.getState().user.token}`
                 }
             });
-            if (response.status === 201) {
-                console.log("Modificar noticia normal registrada correctamente.");
-                return true;
+            if (response.status === 204) {
+                return {success:true,message:'Modificar noticia normal registrada correctamente.'}
             }
             else {
-                console.log(response)
-                return false;
+                return {success:false,message:'No se pudo actualizar la noticia'};
             }
-        } catch (error) {
-            console.error('Error al modificar noticia normal', error);
-            return false;
+        } catch (error:any) {
+            let message = ''
+            if (error.status == 400){
+                message = 'Error de campos'
+            }else if (error.status == 404){
+                message = 'No existe noticia/categoria'
+            }else if (error.status == 409){
+                message = 'No se pudo actualizar la noticia'
+            }else{
+                message = 'No se pudo actualizar la noticia'
+            }
+            return {success:false,message:message};
         }
     },
     modificarNoticiaPublicacion: async (id : string, duracion: number, titulo: string, contenido : string, categoriaId : string ) => {
         try {
-            const response = await axios.patch(`${API_URL}/noticia/modificar-noticia-publicacion`, {
+            const response = await axios.patch(`${API_URL}/noticia/modificar-noticia-publicacion?id=${id}`, {
 
                 duracion, titulo, contenido, categoriaId
             }, {
@@ -83,22 +90,29 @@ const NoticiaService ={
                     Authorization: `Bearer ${useUserStore.getState().user.token}`
                 }
             });
-            if (response.status === 201) {
-                console.log("Modificar noticia publicacion registrada correctamente.");
-                return true;
+            if (response.status === 204) {
+                return {success:true,message:'Modificar noticia normal registrada correctamente.'}
             }
             else {
-                console.log(response)
-                return false;
+                return {success:false,message:'No se pudo actualizar la noticia'};
             }
-        } catch (error) {
-            console.error('Error al modificar noticia publicacion', error);
-            return false;
+        } catch (error:any) {
+            let message = ''
+            if (error.status == 400){
+                message = 'Error de campos'
+            }else if (error.status == 404){
+                message = 'No existe noticia/categoria'
+            }else if (error.status == 409){
+                message = 'No se pudo actualizar la noticia'
+            }else{
+                message = 'No se pudo actualizar la noticia'
+            }
+            return {success:false,message:message};
         }
     },
     modificarNoticiaFoto: async (id : string, duracion: number, titulo: string, multimedia : string, extension : string, categoriaId : string ) => {
         try {
-            const response = await axios.patch(`${API_URL}/noticia/modificar-noticia-foto`, {
+            const response = await axios.patch(`${API_URL}/noticia/modificar-noticia-foto?id=${id}`, {
 
                 duracion, titulo, multimedia, extension, categoriaId
             }, {
@@ -106,39 +120,53 @@ const NoticiaService ={
                     Authorization: `Bearer ${useUserStore.getState().user.token}`
                 }
             });
-            if (response.status === 201) {
-                console.log("Modificar noticia foto registrada correctamente.");
-                return true;
+            if (response.status === 204) {
+                return {success:true,message:'Modificar noticia normal registrada correctamente.'}
             }
             else {
-                console.log(response)
-                return false;
+                return {success:false,message:'No se pudo actualizar la noticia'};
             }
-        } catch (error) {
-            console.error('Error al modificar noticia foto', error);
-            return false;
+        } catch (error:any) {
+            let message = ''
+            if (error.status == 400){
+                message = 'Error de campos'
+            }else if (error.status == 404){
+                message = 'No existe noticia/categoria'
+            }else if (error.status == 409){
+                message = 'No se pudo actualizar la noticia'
+            }else{
+                message = 'No se pudo actualizar la noticia'
+            }
+            return {success:false,message:message};
         }
     },
     modificarNoticiaVideo: async (id : string, duracion: number, titulo: string, multimedia_url : string, categoriaId : string ) => {
         try {
-            const response = await axios.patch(`${API_URL}/noticia/modificar-noticia-video`, {
+            const response = await axios.patch(`${API_URL}/noticia/modificar-noticia-video?id=${id}`, {
                 duracion, titulo, multimedia_url, categoriaId
             }, {
                 headers: {
                     Authorization: `Bearer ${useUserStore.getState().user.token}`
                 }
             });
-            if (response.status === 201) {
-                console.log("Modificar noticia video registrada correctamente.");
-                return true;
+            if (response.status === 204) {
+                return {success:true,message:'Modificar noticia normal registrada correctamente.'}
             }
             else {
-                console.log(response)
-                return false;
+                return {success:false,message:'No se pudo actualizar la noticia'};
             }
-        } catch (error) {
-            console.error('Error al modificar noticia video', error);
-            return false;
+        } catch (error:any) {
+            let message = ''
+            if (error.status == 400){
+                message = 'Error de campos'
+            }else if (error.status == 404){
+                message = 'No existe noticia/categoria'
+            }else if (error.status == 409){
+                message = 'No se pudo actualizar la noticia'
+            }else{
+                message = 'No se pudo actualizar la noticia'
+            }
+            return {success:false,message:message};
         }
     },
     registrarNoticiaVideo: async (duracion: number, titulo: string, multimedia_url : string, categoriaId : string ) => {
@@ -233,29 +261,29 @@ const NoticiaService ={
             return false;
         }
     },
-    registrarNoticiaVideo: async (duracion: number, titulo: string, tipo : string, multimedia_url : string, categoriaId : string ) => {
-        try {
-            const response = await axios.post(`${API_URL}/noticia/noticia-video`, {
+    // registrarNoticiaVideo: async (duracion: number, titulo: string, tipo : string, multimedia_url : string, categoriaId : string ) => {
+    //     try {
+    //         const response = await axios.post(`${API_URL}/noticia/noticia-video`, {
 
-                duracion, titulo, tipo, multimedia_url, categoriaId
-            }, {
-                headers: {
-                    Authorization: `Bearer ${useUserStore.getState().user.token}`
-                }
-            });
-            if (response.status === 201) {
-                console.log("Noticia video registrada correctamente.");
-                return true;
-            }
-            else {
-                console.log(response)
-                return false;
-            }
-        } catch (error) {
-            console.error('Error al registrar noticia video', error);
-            return false;
-        }
-    }
+    //             duracion, titulo, tipo, multimedia_url, categoriaId
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${useUserStore.getState().user.token}`
+    //             }
+    //         });
+    //         if (response.status === 201) {
+    //             console.log("Noticia video registrada correctamente.");
+    //             return true;
+    //         }
+    //         else {
+    //             console.log(response)
+    //             return false;
+    //         }
+    //     } catch (error) {
+    //         console.error('Error al registrar noticia video', error);
+    //         return false;
+    //     }
+    // }
 
 }
 export default NoticiaService;

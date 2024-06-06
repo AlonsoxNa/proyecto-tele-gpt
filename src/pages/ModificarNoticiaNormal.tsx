@@ -1,11 +1,11 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from "@/Componentes/Navbar";
-import { SelecctorFechas } from "@/Componentes/SelecctorFechas";
-import MediaUpload from "../Componentes/MediaUpload";
+
 import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
+import { useLocation } from "react-router-dom";
+import CustomizedSnackbars from "@/components/shared/Snackbar";
 
 const ModificarNoticiaNormal = () => {
   const [titulo, setTitulo] = useState("");
@@ -17,13 +17,37 @@ const ModificarNoticiaNormal = () => {
   const [extension, setExtension] = useState("");
   const [errors, setErrors] = useState({});
 
+  const [msgAlert,setMsgAlert] = useState('')
+  const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
+  const [open, setOpen] = useState(false);
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const location = useLocation()
+  const id = location.state.id;
+
+  const getInfo = async () => {
+    const response = await NoticiaService.obtenerNoticiaPorId(id)
+    setTitulo(response.titulo)
+    setContenido(response.contenido)
+    setCategoriaId(response.categoriaId)
+    setDuracion(response.duracion)
+    setMultimedia(response.multimedia)
+    setExtension(response.extension)
+  }
+  const fetchCategorias = async () => {
+    //const response = await axios.get(`${API_URL}/categorias`);
+    const response = await CategoriaService.obtenerCategorias()
+    setCategorias(response);
+  };
+
   useEffect(() => {
-    const fetchCategorias = async () => {
-      //const response = await axios.get(`${API_URL}/categorias`);
-      const response = await CategoriaService.obtenerCategorias()
-      setCategorias(response);
-    };
     fetchCategorias();
+    getInfo();
   }, []);
 
   const validateField = (field, value) => {
@@ -113,16 +137,7 @@ const ModificarNoticiaNormal = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const data = {
-      id,
-      duracion,
-      titulo,
-      contenido,
-      multimedia,
-      extension,
-      categoriaId
-    };
-    
+
     validateField("titulo", titulo);
     validateField("contenido", contenido);
     validateField("categoriaId", categoriaId);
@@ -132,20 +147,27 @@ const ModificarNoticiaNormal = () => {
 
     const hasErrors = Object.values(errors).some(error => error);
     if (hasErrors) {
-      alert("Por favor corrige los errores antes de enviar el formulario.");
+      setMsgAlert("Por favor corrige los errores antes de enviar el formulario.")
+      setSeverityAlert("warning")
+      setOpen(true)
       return;
     }
 
     let response = await NoticiaService.modificarNoticiaNormal(id, duracion, titulo, contenido, multimedia, extension, categoriaId);
-    if (response) {
-      alert("Modificacion registrada correctamente.");
-    } else {
-      alert("Error al modificar la noticia.");
+    if (response.success){
+      setMsgAlert(response.message)
+      setSeverityAlert("success")
+      setOpen(true)
+    }else{
+      setMsgAlert(response.message)
+      setSeverityAlert("error")
+      setOpen(true)
     }
   };
 
   return (
     <>
+      <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
           <div className="row">
@@ -215,7 +237,7 @@ const ModificarNoticiaNormal = () => {
               </div>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary">Mpdificar Noticia</button>
+          <button type="submit" className="btn btn-primary">Modificar Noticia</button>
         </form>
       </div>
     </>

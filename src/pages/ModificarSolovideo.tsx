@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from "@/Componentes/Navbar";
-import MediaUpload from "../Componentes/MediaUpload";
 import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
+import { useLocation } from "react-router-dom";
+import CustomizedSnackbars from "@/components/shared/Snackbar";
 
 const ModificarSolovideo = () => {
   const [titulo, setTitulo] = useState("");
@@ -14,15 +13,38 @@ const ModificarSolovideo = () => {
   const [duracion, setDuracion] = useState(0);
   const [errors, setErrors] = useState({});
 
+  const [msgAlert,setMsgAlert] = useState('')
+  const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
+  const [open, setOpen] = useState(false);
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const location = useLocation()
+  const id = location.state.id;
+
+  const getInfo = async () => {
+    const response = await NoticiaService.obtenerNoticiaPorId(id)
+    setTitulo(response.titulo)
+    setMultimediaUrl(response.multimedia_url)
+    setCategoriaId(response.categoriaId)
+    setDuracion(response.duracion)
+  }
+  const fetchCategorias = async () => {
+    //const response = await axios.get(`${API_URL}/categorias`);
+    const response = await CategoriaService.obtenerCategorias()
+    setCategorias(response);
+  };
+
   useEffect(() => {
-    const fetchCategorias = async () => {
-      const response = await CategoriaService.obtenerCategorias();
-      setCategorias(response);
-    };
     fetchCategorias();
+    getInfo();
   }, []);
 
-  const validateField = (field, value) => {
+  const validateField = (field:string, value:any) => {
     let error = "";
     switch (field) {
       case "titulo":
@@ -58,33 +80,32 @@ const ModificarSolovideo = () => {
     setErrors(prevErrors => ({ ...prevErrors, [field]: error }));
   };
 
-  const handleTituloChange = (e) => {
+  const handleTituloChange = (e:any) => {
     const value = e.target.value;
     setTitulo(value);
     validateField("titulo", value);
   };
 
-  const handleMultimediaUrlChange = (e) => {
+  const handleMultimediaUrlChange = (e:any) => {
     const value = e.target.value;
     setMultimediaUrl(value);
     validateField("multimediaUrl", value);
   };
 
-  const handleCategoriaChange = (e) => {
+  const handleCategoriaChange = (e:any) => {
     const value = e.target.value;
     setCategoriaId(value);
     validateField("categoriaId", value);
   };
 
-  const handleDuracionChange = (e) => {
+  const handleDuracionChange = (e:any) => {
     const value = parseInt(e.target.value, 10);
     setDuracion(value);
     validateField("duracion", value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
-    const id; 
     // Validate all fields before submitting
     validateField("titulo", titulo);
     validateField("multimediaUrl", multimediaUrl);
@@ -93,24 +114,27 @@ const ModificarSolovideo = () => {
 
     const hasErrors = Object.values(errors).some(error => error);
     if (hasErrors) {
-      alert("Por favor corrige los errores antes de enviar el formulario.");
+      setMsgAlert("Por favor corrige los errores antes de enviar el formulario.")
+      setSeverityAlert("warning")
+      setOpen(true)
       return;
     }
 
-    try {
-      const response = await NoticiaService.modificarNoticiaVideo(id, duracion, titulo, multimediaUrl, categoriaId);
-      if (response) {
-        alert("Modificar noticia video registrada correctamente.");
-      } else {
-        alert("Error al modificar la noticia video.");
-      }
-    } catch (error) {
-      alert("Error al modificar la noticia video.");
+    const response = await NoticiaService.modificarNoticiaVideo(id, duracion, titulo, multimediaUrl, categoriaId);
+    if (response.success){
+      setMsgAlert(response.message)
+      setSeverityAlert("success")
+      setOpen(true)
+    }else{
+      setMsgAlert(response.message)
+      setSeverityAlert("error")
+      setOpen(true)
     }
   };
 
   return (
     <>
+      <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
           <div className="row">
