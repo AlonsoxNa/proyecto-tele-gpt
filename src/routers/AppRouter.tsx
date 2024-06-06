@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import { HomeTemporal } from '../pages/HomeTemporal';
 import CrearAnuncio from '../pages/CrearAnuncio';
 import Solofoto from '../pages/Solofoto';
@@ -12,6 +12,10 @@ import NoticiasOcultas from "../pages/NoticiasOcultas";
 import { Login } from '@/pages/Login';
 import { Layout } from '@/components/layout/Layout';
 import { PrivateRoute } from './PrivateRoute';
+import ModificarNoticiaNormal from "@/pages/ModificarNoticiaNormal";
+import ModificarSolofoto from "@/pages/ModificarSolofoto";
+import ModificarSolovideo from "@/pages/ModificarSolovideo";
+import ModificarSolotexto from "@/pages/ModificarSolotexto";
 
 export const router = createBrowserRouter( [
   {
@@ -22,10 +26,6 @@ export const router = createBrowserRouter( [
     path: "/login",
     element: <Login />
   },
-  // {
-  //   path: "/admin",
-  //   element: <Dashboard />,
-  // },
   {
     path: "/admin/",
     element: <PrivateRoute> <Layout /> </PrivateRoute>,
@@ -49,6 +49,22 @@ export const router = createBrowserRouter( [
       {
         path: "Solotexto",
         element: <Solotexto />,
+      },{
+        path: "modificar-normal",
+        element: <ModificarNoticiaNormal />,
+      },{
+        path: "modificar-foto",
+        element: <ModificarSolofoto />,
+      },{
+        path: "modificar-video",
+        element: <ModificarSolovideo />,
+      },{
+        path: "modificar-texto",
+        element: <ModificarSolotexto />,
+      }
+      ,{
+        path: "Ayuda",
+        element: <Ayuda />,
       }
     ]
   },
@@ -56,10 +72,7 @@ export const router = createBrowserRouter( [
     path: '/slider',
     element: <Slider />
   },
-  {
-    path: "/Ayuda",
-    element: <Ayuda />,
-  },
+  
   {
     path: '/NoticiasOcultas',
     element: <NoticiasOcultas />

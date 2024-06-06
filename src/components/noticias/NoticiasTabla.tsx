@@ -1,7 +1,7 @@
 import { Alert, Backdrop, Checkbox, CircularProgress, Grid, IconButton, Snackbar, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 // import './TablaSimplev2.css'; // Importa tu archivo CSS personalizado
 import { ResponseCambiarEstadoNoticia } from '@/interfaces/Noticia';
-import { cambiarEstadoNoticiaAPI } from '@/services/noticiasService';
+import { borrarNoticiaAPI, cambiarEstadoNoticiaAPI } from '@/services/noticiasService';
 import { useNoticiasStore } from '@/stores/noticias/noticias.store';
 import { useSelectNoticias } from '@/stores/noticias/selectNoticias.store';
 import { formatDate } from '@/utils/noticias/convertirFecha';
@@ -12,6 +12,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { convertirTipoNoticia } from '@/utils/noticias/convertirTipoNoticia';
 import { estilosTipoNoticia } from '@/assets/noticias/tipoNoticia';
+import { useNavigate } from 'react-router-dom';
 
 
 export const NoticiasTabla: FC = () => {
@@ -24,6 +25,8 @@ export const NoticiasTabla: FC = () => {
   const [ openSnackbar, setOpenSnackbar ] = useState<boolean>( false );
   const [ messageSnackbar, setMessageSnackbar ] = useState<string>( "" );
   const [ isError, setIsError ] = useState<boolean>( false );
+
+  const navigate = useNavigate()
 
 
   const handleCloseSnackbar = () => {
@@ -52,13 +55,32 @@ export const NoticiasTabla: FC = () => {
     setIsLoading( false );
   };
 
+  const handleModificarNoticia = (id:string,tipo:string) => {
+    if (tipo=='Normal'){
+      navigate('/admin/modificar-normal',{state:{id:id}})
+    }else if (tipo=='Multimedia'){
+      navigate('/admin/modificar-foto',{state:{id:id}})
+    }else if (tipo=='Url'){
+      navigate('/admin/modificar-video',{state:{id:id}})
+    }else if (tipo=='Publicacion'){
+      navigate('/admin/modificar-texto',{state:{id:id}})
+    }
+  }
+
   // TODO: Implementar método para borrar noticia
-  /* const handleDeleteNoticia = async ( id: string ) => {
+  const handleDeleteNoticia = async ( id: string ) => {
     setIsLoading( true );
-
-
+    const response = await borrarNoticiaAPI(id)
+    if (response.success){
+      setMessageSnackbar( `Has eliminado la noticia correctamente` );
+      setIsError( false );
+      fetchNoticias();
+    }else{
+      setMessageSnackbar( `Error al eliminar la noticia, ${response.message}` );
+      setIsError( true );
+    }
     setIsLoading( false );
-  }; */
+  };
 
   // TODO: Implementar método para redireccionar a vista para modificar noticia
   /* const handleModificarNoticia = async ( noticia: Noticia ) => {
@@ -189,7 +211,9 @@ export const NoticiasTabla: FC = () => {
               <TableCell>
 
                 <Stack direction="row" spacing={ 1 }>
-                  <IconButton sx={ { width: 'auto', backgroundColor: '#ffc6ba' } } color="error" ><DeleteIcon /></IconButton>
+                  <IconButton sx={ { width: 'auto', backgroundColor: '#ffc6ba' } } color="error" 
+                  onClick={ () => handleDeleteNoticia(row.id) }
+                  ><DeleteIcon /></IconButton>
                   <IconButton
                     sx={ { width: 'auto', backgroundColor: row.habilitado ? '#ffc6ba' : '#c7ffc9' } }
                     color={ row.habilitado ? 'error' : 'success' }
@@ -197,7 +221,7 @@ export const NoticiasTabla: FC = () => {
                   >
                     { row.habilitado ? <RemoveCircleIcon /> : <AddCircleIcon /> }
                   </IconButton>
-                  <IconButton sx={ { width: 'auto', backgroundColor: '#c6def5' } } color="primary"> <ModeEditIcon /> </IconButton>
+                  <IconButton onClick={ () => handleModificarNoticia( row.id, row.tipo) } sx={ { width: 'auto', backgroundColor: '#c6def5' } } color="primary"> <ModeEditIcon /> </IconButton>
                 </Stack>
               </TableCell>
 

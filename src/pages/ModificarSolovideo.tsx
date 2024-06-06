@@ -1,29 +1,55 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from "@/Componentes/Navbar";
-import { SelecctorFechas } from "@/Componentes/SelecctorFechas";
 import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
+import { useLocation } from "react-router-dom";
+import CustomizedSnackbars from "@/components/shared/Snackbar";
 
-const Solotexto = () => {
+interface CategoriaInterface{
+  id:string;
+  nombre:string
+}
+
+const ModificarSolovideo = () => {
   const [titulo, setTitulo] = useState("");
-  const [contenido, setContenido] = useState("");
+  const [multimediaUrl, setMultimediaUrl] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
-  const [categorias, setCategorias] = useState([]);
+  const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
   const [duracion, setDuracion] = useState(0);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<any>({});
+
+  const [msgAlert,setMsgAlert] = useState('')
+  const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
+  const [open, setOpen] = useState(false);
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const location = useLocation()
+  const id = location.state.id;
+
+  const getInfo = async () => {
+    const response = await NoticiaService.obtenerNoticiaPorId(id)
+    setTitulo(response.titulo)
+    setMultimediaUrl(response.multimedia_url)
+    setCategoriaId(response.categoriaId)
+    setDuracion(response.duracion)
+  }
+  const fetchCategorias = async () => {
+    //const response = await axios.get(`${API_URL}/categorias`);
+    const response = await CategoriaService.obtenerCategorias()
+    setCategorias(response);
+  };
 
   useEffect(() => {
-    const fetchCategorias = async () => {
-      //const response = await axios.get(`${API_URL}/categorias`);
-      const response = await CategoriaService.obtenerCategorias()
-      setCategorias(response);
-    };
     fetchCategorias();
-    }, []);
+    getInfo();
+  }, []);
 
-  const validateField = (field, value) => {
+  const validateField = (field:string, value:any) => {
     let error = "";
     switch (field) {
       case "titulo":
@@ -35,13 +61,12 @@ const Solotexto = () => {
           error = "El título debe tener un máximo de 50 caracteres";
         }
         break;
-      case "contenido":
+      case "multimediaUrl":
+        const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
         if (!value) {
-          error = "El contenido es obligatorio";
-        } else if (value.length < 5) {
-          error = "El contenido debe tener un mínimo de 5 caracteres";
-        } else if (value.length > 500) {
-          error = "El contenido debe tener un máximo de 500 caracteres";
+          error = "El URL del video es obligatorio";
+        } else if (!youtubeRegex.test(value)) {
+          error = "El URL debe ser un enlace válido de YouTube";
         }
         break;
       case "categoriaId":
@@ -60,62 +85,67 @@ const Solotexto = () => {
     setErrors(prevErrors => ({ ...prevErrors, [field]: error }));
   };
 
-  const handleTituloChange = (e) => {
+  const handleTituloChange = (e:any) => {
     const value = e.target.value;
     setTitulo(value);
     validateField("titulo", value);
   };
 
-  const handleContenidoChange = (e) => {
+  const handleMultimediaUrlChange = (e:any) => {
     const value = e.target.value;
-    setContenido(value);
-    validateField("contenido", value);
+    setMultimediaUrl(value);
+    validateField("multimediaUrl", value);
   };
 
-  const handleCategoriaChange = (e) => {
+  const handleCategoriaChange = (e:any) => {
     const value = e.target.value;
     setCategoriaId(value);
     validateField("categoriaId", value);
   };
 
-  const handleDuracionChange = (e) => {
+  const handleDuracionChange = (e:any) => {
     const value = parseInt(e.target.value, 10);
     setDuracion(value);
     validateField("duracion", value);
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
-    const tipo = "Publicacion";
-
     // Validate all fields before submitting
     validateField("titulo", titulo);
-    validateField("contenido", contenido);
+    validateField("multimediaUrl", multimediaUrl);
     validateField("categoriaId", categoriaId);
     validateField("duracion", duracion);
 
     const hasErrors = Object.values(errors).some(error => error);
     if (hasErrors) {
-      alert("Por favor corrige los errores antes de enviar el formulario.");
+      setMsgAlert("Por favor corrige los errores antes de enviar el formulario.")
+      setSeverityAlert("warning")
+      setOpen(true)
       return;
     }
 
-    let response = await NoticiaService.registrarNoticiaPublicacion(duracion, titulo, contenido, tipo, categoriaId);
-    if (response) {
-      alert("Noticia publicación registrada correctamente.");
-    } else {
-      alert("Error al registrar la noticia publicación.");
+    const response = await NoticiaService.modificarNoticiaVideo(id, duracion, titulo, multimediaUrl, categoriaId);
+    if (response.success){
+      setMsgAlert(response.message)
+      setSeverityAlert("success")
+      setOpen(true)
+    }else{
+      setMsgAlert(response.message)
+      setSeverityAlert("error")
+      setOpen(true)
     }
   };
 
   return (
     <>
+      <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-md-6">
               <div className="mb-3">
-                <label htmlFor="titulo1" className="form-label">Ingresa título de la publicación</label>
+                <label htmlFor="titulo1" className="form-label">Ingresa título</label>
                 <input 
                   type="text" 
                   id="titulo1" 
@@ -126,19 +156,6 @@ const Solotexto = () => {
                 {errors.titulo && <div className="text-danger">{errors.titulo}</div>}
               </div>
               <div className="mb-3">
-                <label htmlFor="descripcion" className="form-label">Ingresa contenido de la publicación</label>
-                <textarea 
-                  id="descripcion" 
-                  className="form-control" 
-                  rows={8} 
-                  value={contenido} 
-                  onChange={handleContenidoChange}
-                ></textarea>
-                {errors.contenido && <div className="text-danger">{errors.contenido}</div>}
-              </div>
-            </div>
-            <div className="col-md-6">
-            <div className="mb-3">
                 <label htmlFor="categoria" className="form-label">Elige la categoría</label>
                 <select 
                   id="categoria" 
@@ -153,10 +170,20 @@ const Solotexto = () => {
                 </select>
                 {errors.categoriaId && <div className="text-danger">{errors.categoriaId}</div>}
               </div>
-              {/* <div className="mb-3">
-                <label htmlFor="fecha" className="form-label">Elige la fecha de la publicación</label>
-                <SelecctorFechas />
-              </div> */}
+            </div>
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label htmlFor="mediaUrl" className="form-label">Ingresa la URL del video</label>
+                <input 
+                  type="text" 
+                  id="mediaUrl" 
+                  name="mediaUrl" 
+                  className="form-control" 
+                  value={multimediaUrl}
+                  onChange={handleMultimediaUrlChange} 
+                />
+                {errors.multimediaUrl && <div className="text-danger">{errors.multimediaUrl}</div>}
+              </div>
               <div className="mb-3">
                 <label htmlFor="duracion" className="form-label">Duración en pantalla (segundos)</label>
                 <input 
@@ -173,11 +200,11 @@ const Solotexto = () => {
               </div>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary">Crear Publicación</button>
+          <button type="submit" className="btn btn-primary">Modificar Noticia Video</button>
         </form>
       </div>
     </>
   );
 };
 
-export default Solotexto;
+export default ModificarSolovideo;

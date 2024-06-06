@@ -3,6 +3,7 @@ import "./NavbarInicio.css";
 import Weather from "../weather/Wheather";
 import { useEffect, useState } from "react";
 import Time from "../time/Time";
+import { Box } from "@mui/material";
 
 interface Clima{
     id: number,
@@ -80,9 +81,9 @@ export const NavbarInicio = () => {
     
     return(
         <div className="navbari container">
-            <div className="">
+            <Box alignItems={"center"} display={'flex'}>
                 <img src="/src/assets/logo.png" className="container-logo"></img>
-            </div>
+            </Box>
             <div className="align-items-center d-flex">
                 <Time />
             </div>

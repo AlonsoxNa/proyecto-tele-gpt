@@ -1,18 +1,20 @@
 import { HeaderNoticiasTabla } from '@/components/noticias/HeaderNoticiasTabla';
 import { NoticiasTabla } from '@/components/noticias/NoticiasTabla';
-import { Grid } from '@mui/material';
+import { Grid,Container } from '@mui/material';
 
 export const Noticias = () => {
 
   return (
     <>
-      <Grid container className="container" sx={{mt:"1rem"}}>
+      <Grid container>
+        <Container >
+          {/* Filtros de noticias */ }
+          <HeaderNoticiasTabla />
 
-        {/* Filtros de noticias */ }
-        <HeaderNoticiasTabla />
+          {/* Tabla de noticias */ }
+          <NoticiasTabla />
 
-        {/* Tabla de noticias */ }
-        <NoticiasTabla />
+        </Container>
 
       </Grid>
 

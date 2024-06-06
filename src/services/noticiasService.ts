@@ -47,12 +47,22 @@ export const cambiarEstadoNoticiasAPI = async ( ids: string[], estado: boolean )
 };
 
 // TODO: Implementar llamada a la API para borrar noticia
-/* export const borrarNoticiaAPI = async ( id: string ) => {
+export const borrarNoticiaAPI = async ( id: string ) => {
   try {
-    const response = await axios.delete( `${ API_URL }/noticia/borrar?id=${ id }` );
-
-    return response;
-  } catch ( error ) {
-    return error;
+    const response = await axios.delete( `${ API_URL }/noticia?id=${id}` );
+    if (response.status ==202){
+      return {success:true,message:'Eliminada correctamente'}
+    }
+    return  {success:false};
+  } catch ( error:any ) {
+    let message=''
+    if (error.status == 404){
+      message='No existe noticia con ese id'
+    }else if(error.status == 400){
+      message='Error por body'
+    }else if (error.status == 409){
+      message='Ocurrió un error al eliminar'
+    }
+    return {success:false,message:message};
   }
-}; */
+};
