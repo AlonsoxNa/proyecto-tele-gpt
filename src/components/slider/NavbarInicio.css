@@ -1,6 +1,7 @@
 .navbari{
     width: 100vw;
     height: 12vh;
+    max-height: 12vh;
     display: flex;
     justify-content: space-between;
     background-color: #ffffff;
@@ -25,5 +26,5 @@
 box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
     display: flex;
     padding-right: 1rem;
-    background: #00d5ff;
+    background: #009A8C;
 }
