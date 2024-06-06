@@ -5,13 +5,18 @@ import CategoriaService from "@/services/CategoriaService";
 import { useLocation } from "react-router-dom";
 import CustomizedSnackbars from "@/components/shared/Snackbar";
 
+interface CategoriaInterface{
+  id:string;
+  nombre:string
+}
+
 const ModificarSolotexto = () => {
   const [titulo, setTitulo] = useState("");
   const [contenido, setContenido] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
-  const [categorias, setCategorias] = useState([]);
+  const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
   const [duracion, setDuracion] = useState(0);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<any>({});
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
@@ -44,7 +49,7 @@ const ModificarSolotexto = () => {
     getInfo();
   }, []);
 
-  const validateField = (field, value) => {
+  const validateField = (field:string, value:any) => {
     let error = "";
     switch (field) {
       case "titulo":
@@ -81,25 +86,25 @@ const ModificarSolotexto = () => {
     setErrors(prevErrors => ({ ...prevErrors, [field]: error }));
   };
 
-  const handleTituloChange = (e) => {
+  const handleTituloChange = (e:any) => {
     const value = e.target.value;
     setTitulo(value);
     validateField("titulo", value);
   };
 
-  const handleContenidoChange = (e) => {
+  const handleContenidoChange = (e:any) => {
     const value = e.target.value;
     setContenido(value);
     validateField("contenido", value);
   };
 
-  const handleCategoriaChange = (e) => {
+  const handleCategoriaChange = (e:any) => {
     const value = e.target.value;
     setCategoriaId(value);
     validateField("categoriaId", value);
   };
 
-  const handleDuracionChange = (e) => {
+  const handleDuracionChange = (e:any) => {
     const value = parseInt(e.target.value, 10);
     setDuracion(value);
     validateField("duracion", value);

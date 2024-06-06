@@ -5,13 +5,18 @@ import CategoriaService from "@/services/CategoriaService";
 import { useLocation } from "react-router-dom";
 import CustomizedSnackbars from "@/components/shared/Snackbar";
 
+interface CategoriaInterface{
+  id:string;
+  nombre:string
+}
+
 const ModificarSolovideo = () => {
   const [titulo, setTitulo] = useState("");
   const [multimediaUrl, setMultimediaUrl] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
-  const [categorias, setCategorias] = useState([]);
+  const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
   const [duracion, setDuracion] = useState(0);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<any>({});
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')

@@ -1,21 +1,24 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
 import { useLocation } from "react-router-dom";
 import CustomizedSnackbars from "@/components/shared/Snackbar";
 
+interface CategoriaInterface{
+  id:string;
+  nombre:string
+}
+
 const ModificarNoticiaNormal = () => {
   const [titulo, setTitulo] = useState("");
   const [contenido, setContenido] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
-  const [categorias, setCategorias] = useState([]);
+  const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
   const [duracion, setDuracion] = useState(0);
   const [multimedia, setMultimedia] = useState("");
   const [extension, setExtension] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<any>({});
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
@@ -50,7 +53,7 @@ const ModificarNoticiaNormal = () => {
     getInfo();
   }, []);
 
-  const validateField = (field, value) => {
+  const validateField = (field:string, value:any) => {
     let error = "";
     switch (field) {
       case "titulo":
@@ -97,31 +100,31 @@ const ModificarNoticiaNormal = () => {
     setErrors(prevErrors => ({ ...prevErrors, [field]: error }));
   };
 
-  const handleTituloChange = (e) => {
+  const handleTituloChange = (e:any) => {
     const value = e.target.value;
     setTitulo(value);
     validateField("titulo", value);
   };
 
-  const handleContenidoChange = (e) => {
+  const handleContenidoChange = (e:any) => {
     const value = e.target.value;
     setContenido(value);
     validateField("contenido", value);
   };
 
-  const handleCategoriaChange = (e) => {
+  const handleCategoriaChange = (e:any) => {
     const value = e.target.value;
     setCategoriaId(value);
     validateField("categoriaId", value);
   };
 
-  const handleDuracionChange = (e) => {
+  const handleDuracionChange = (e:any) => {
     const value = parseInt(e.target.value, 10);
     setDuracion(value);
     validateField("duracion", value);
   };
 
-  const handleImagenChange = (event) => {
+  const handleImagenChange = (event:any) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();

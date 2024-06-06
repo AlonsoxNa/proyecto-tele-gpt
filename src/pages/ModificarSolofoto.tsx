@@ -5,14 +5,19 @@ import CategoriaService from "@/services/CategoriaService";
 import { useLocation } from "react-router-dom";
 import CustomizedSnackbars from "@/components/shared/Snackbar";
 
+interface CategoriaInterface{
+  id:string;
+  nombre:string
+}
+
 const ModificarSolofoto = () => {
   const [titulo, setTitulo] = useState("");
   const [duracion, setDuracion] = useState(0);
   const [multimedia, setMultimedia] = useState("");
   const [extension, setExtension] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
-  const [categorias, setCategorias] = useState([]);
-  const [errors, setErrors] = useState({});
+  const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
+  const [errors, setErrors] = useState<any>({});
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
@@ -46,7 +51,7 @@ const ModificarSolofoto = () => {
     getInfo();
   }, []);
 
-  const validateField = (field, value) => {
+  const validateField = (field:string, value:any) => {
     let error = "";
     switch (field) {
       case "titulo":
@@ -86,19 +91,19 @@ const ModificarSolofoto = () => {
     setErrors(prevErrors => ({ ...prevErrors, [field]: error }));
   };
 
-  const handleTituloChange = (e) => {
+  const handleTituloChange = (e:any) => {
     const value = e.target.value;
     setTitulo(value);
     validateField("titulo", value);
   };
 
-  const handleDuracionChange = (e) => {
+  const handleDuracionChange = (e:any) => {
     const value = parseInt(e.target.value, 10);
     setDuracion(value);
     validateField("duracion", value);
   };
 
-  const handleImagenChange = (event) => {
+  const handleImagenChange = (event:any) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -112,7 +117,7 @@ const ModificarSolofoto = () => {
     }
   };
 
-  const handleCategoriaChange = (e) => {
+  const handleCategoriaChange = (e:any) => {
     const value = e.target.value;
     setCategoriaId(value);
     validateField("categoriaId", value);

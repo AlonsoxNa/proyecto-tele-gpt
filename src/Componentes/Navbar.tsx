@@ -18,6 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Grid } from '@mui/material';
+import { AccountCircle } from '@mui/icons-material';
 
 const settings = ['Perfil', 'Cuenta', 'Cerrar sesión'];
 
@@ -177,10 +178,14 @@ const Navbar = () => {
                 </Box>
 
                 <Box sx={{ flexGrow: 0 }}>
-                    <Tooltip title="Open settings">
-                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                    </IconButton>
+                    <Tooltip title="Abrir configuracion">
+                        <IconButton onClick={handleOpenUserMenu}
+                            size="large" color="inherit"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true" sx={{ p: 0 }}>
+                            <AccountCircle />
+                        </IconButton>
                     </Tooltip>
                     <Menu
                     sx={{ mt: '45px' }}
