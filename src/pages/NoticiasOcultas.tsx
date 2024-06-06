@@ -6,6 +6,30 @@ import TablaSimplev2 from "../Componentes/Tablasimple/TablaSimplev2"
 
 const NoticiasOcultas = () => {
 
+  const handleModificarNoticia = async (id) => {
+    
+    try {
+      let response;
+      switch (tipo) {
+        case 'Normal':
+          //mostrar ModificarNoticiaNormal
+          break;
+        case 'Publicacion':
+          //mostrar ModificarSolotexto
+          break;
+        case 'Multimedia':
+          //mostrar ModificarSolofoto
+          break;
+        case 'Url':
+          //mostrar ModificarSolovideo
+          break;
+        default:
+          throw new Error('Tipo de noticia no soportado');
+      }
+    } catch (error) {
+      console.error('Error al modificar la noticia', error);
+    }
+  };
 
     const datosResultadospostula = [
       {
@@ -14,9 +38,7 @@ const NoticiasOcultas = () => {
         Fecha:'2024-01-12',
         BotonBorrar: {
           titulo: 'Eliminar',
-          funcion: () => {
-            console.log("Eliminar")
-          }
+          funcion: () => 
         },
         BotonOcultar: {
           titulo: 'Ocultar',
@@ -26,116 +48,11 @@ const NoticiasOcultas = () => {
         },
         BotonModificar: {
           titulo: 'Modificar',
-          funcion: () => {
-            console.log("Modificar ")
-          }
+          funcion: () => handleModificarNoticia(id)
         },
   
       },
-  
-      {
-        id:2,
-        Noticia:'El fin del mundo ya esta cerca, todos vamos a morir  ',
-        Fecha:'2024-01-12',
-        BotonBorrar: {
-          titulo: 'Eliminar',
-          funcion: () => {
-            console.log("Eliminar")
-          }
-        },
-        BotonOcultar: {
-          titulo: 'Ocultar',
-          funcion: () => {
-            console.log("Ocultar")
-          }
-        },
-        BotonModificar: {
-          titulo: 'Modificar',
-          funcion: () => {
-            console.log("Modificar ")
-          }
-        },
-  
-      },
-  
-      {
-        id:3,
-        Noticia:'Ahora hay energia infinita, nuevo descubrimiento',
-        Fecha:'2024-01-12',
-        BotonBorrar: {
-          titulo: 'Eliminar',
-          funcion: () => {
-            console.log("Eliminar")
-          }
-        },
-        BotonOcultar: {
-          titulo: 'Ocultar',
-          funcion: () => {
-            console.log("Ocultar")
-          }
-        },
-        BotonModificar: {
-          titulo: 'Modificar',
-          funcion: () => {
-            console.log("Modificar ")
-          }
-        },
-  
-      },
-      
-      {
-        id:3,
-        Noticia:'Esta noticia no estaba antes',
-        Fecha:'2024-01-12',
-        BotonBorrar: {
-          titulo: 'Eliminar',
-          funcion: () => {
-            console.log("Eliminar")
-          }
-        },
-        BotonOcultar: {
-          titulo: 'Mostrar',
-          funcion: () => {
-            console.log("Ocultar")
-          }
-        },
-        BotonModificar: {
-          titulo: 'Modificar',
-          funcion: () => {
-            console.log("Modificar ")
-          }
-        },
-  
-      },
-  
-      {
-        id:3,
-        Noticia:'Jaja saludos a todos, uwu jijija',
-        Fecha:'2024-01-12',
-        BotonBorrar: {
-          titulo: 'Eliminar',
-          funcion: () => {
-            console.log("Eliminar")
-          }
-        },
-        BotonOcultar: {
-          titulo: 'Mostrar',
-          funcion: () => {
-            console.log("Ocultar")
-          }
-        },
-        BotonModificar: {
-          titulo: 'Modificar',
-          funcion: () => {
-            console.log("Modificar ")
-          }
-        },
-  
-      },
-  
-      
-      
-  
+
     ]
 
 
