@@ -12,6 +12,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { convertirTipoNoticia } from '@/utils/noticias/convertirTipoNoticia';
 import { estilosTipoNoticia } from '@/assets/noticias/tipoNoticia';
+import { useNavigate } from 'react-router-dom';
 
 
 export const NoticiasTabla: FC = () => {
@@ -24,6 +25,8 @@ export const NoticiasTabla: FC = () => {
   const [ openSnackbar, setOpenSnackbar ] = useState<boolean>( false );
   const [ messageSnackbar, setMessageSnackbar ] = useState<string>( "" );
   const [ isError, setIsError ] = useState<boolean>( false );
+
+  const navigate = useNavigate()
 
 
   const handleCloseSnackbar = () => {
@@ -51,6 +54,18 @@ export const NoticiasTabla: FC = () => {
     fetchNoticias();
     setIsLoading( false );
   };
+
+  const handleModificarNoticia = (id:string,tipo:string) => {
+    if (tipo=='Normal'){
+      navigate('/admin/modificar-normal',{state:{id:id}})
+    }else if (tipo=='Multimedia'){
+      navigate('/admin/modificar-foto',{state:{id:id}})
+    }else if (tipo=='Url'){
+      navigate('/admin/modificar-video',{state:{id:id}})
+    }else if (tipo=='Publicacion'){
+      navigate('/admin/modificar-texto',{state:{id:id}})
+    }
+  }
 
   // TODO: Implementar método para borrar noticia
   const handleDeleteNoticia = async ( id: string ) => {
@@ -206,7 +221,7 @@ export const NoticiasTabla: FC = () => {
                   >
                     { row.habilitado ? <RemoveCircleIcon /> : <AddCircleIcon /> }
                   </IconButton>
-                  <IconButton sx={ { width: 'auto', backgroundColor: '#c6def5' } } color="primary"> <ModeEditIcon /> </IconButton>
+                  <IconButton onClick={ () => handleModificarNoticia( row.id, row.tipo) } sx={ { width: 'auto', backgroundColor: '#c6def5' } } color="primary"> <ModeEditIcon /> </IconButton>
                 </Stack>
               </TableCell>
 
