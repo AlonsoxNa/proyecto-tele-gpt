@@ -4,6 +4,7 @@ import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
 import { useLocation } from "react-router-dom";
 import CustomizedSnackbars from "@/components/shared/Snackbar";
+import { Grid, Typography } from "@mui/material";
 
 interface CategoriaInterface{
   id:string;
@@ -138,7 +139,10 @@ const ModificarSolovideo = () => {
   };
 
   return (
-    <>
+    <Grid container>
+      <Grid sx={{width:"100%", mb:"1.5rem" }}>
+        <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Modificar Noticia: Sólo video</Typography>
+      </Grid>
       <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
@@ -185,7 +189,7 @@ const ModificarSolovideo = () => {
                 {errors.multimediaUrl && <div className="text-danger">{errors.multimediaUrl}</div>}
               </div>
               <div className="mb-3">
-                <label htmlFor="duracion" className="form-label">Duración en pantalla (segundos)</label>
+                <label htmlFor="duracion" className="form-label">Duración en pantalla segundos (Duración del video)</label>
                 <input 
                   type="number" 
                   id="duracion" 
@@ -203,7 +207,7 @@ const ModificarSolovideo = () => {
           <button type="submit" className="btn btn-primary">Modificar Noticia Video</button>
         </form>
       </div>
-    </>
+    </Grid>
   );
 };
 

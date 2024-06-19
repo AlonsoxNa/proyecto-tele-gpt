@@ -6,6 +6,8 @@ import { SelecctorFechas } from "@/Componentes/SelecctorFechas";
 import MediaUpload from "../Componentes/MediaUpload";
 import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
+import { Grid, Typography } from "@mui/material";
+import CustomizedSnackbars from "@/components/shared/Snackbar";
 
 const CrearAnuncio = () => {
   const [titulo, setTitulo] = useState("");
@@ -16,6 +18,16 @@ const CrearAnuncio = () => {
   const [multimedia, setMultimedia] = useState("");
   const [extension, setExtension] = useState("");
   const [errors, setErrors] = useState({});
+
+  const [msgAlert,setMsgAlert] = useState('')
+  const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
+  const [open, setOpen] = useState(false);
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   useEffect(() => {
     const fetchCategorias = async () => {
@@ -133,20 +145,30 @@ const CrearAnuncio = () => {
 
     const hasErrors = Object.values(errors).some(error => error);
     if (hasErrors) {
-      alert("Por favor corrige los errores antes de enviar el formulario.");
+      setMsgAlert("Por favor corrige los errores antes de enviar el formulario.")
+      setSeverityAlert("warning")
+      setOpen(true)
       return;
     }
 
     let response = await NoticiaService.registrarNoticiaNormal(duracion, titulo, contenido, tipo, multimedia, extension, categoriaId);
-    if (response) {
-      alert("Noticia registrada correctamente.");
-    } else {
-      alert("Error al registrar la noticia.");
+    if (response.success){
+      setMsgAlert(response.message)
+      setSeverityAlert("success")
+      setOpen(true)
+    }else{
+      setMsgAlert(response.message)
+      setSeverityAlert("error")
+      setOpen(true)
     }
   };
 
   return (
-    <>
+    <Grid container>
+      <Grid sx={{width:"100%", mb:"1.5rem" }}>
+        <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Registro Noticia: Normal</Typography>
+      </Grid>
+      <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
           <div className="row">
@@ -219,7 +241,7 @@ const CrearAnuncio = () => {
           <button type="submit" className="btn btn-primary">Crear Noticia</button>
         </form>
       </div>
-    </>
+    </Grid>
   );
 };
 

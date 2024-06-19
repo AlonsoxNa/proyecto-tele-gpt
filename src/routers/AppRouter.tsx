@@ -16,15 +16,13 @@ import ModificarNoticiaNormal from "@/pages/ModificarNoticiaNormal";
 import ModificarSolofoto from "@/pages/ModificarSolofoto";
 import ModificarSolovideo from "@/pages/ModificarSolovideo";
 import ModificarSolotexto from "@/pages/ModificarSolotexto";
+import NotFound from "@/pages/NotFound";
+import { PublicRoute } from "./PublicRoute";
 
 export const router = createBrowserRouter( [
   {
-    path: "/home",
-    element: <HomeTemporal />,
-  },
-  {
     path: "/login",
-    element: <Login />
+    element: <PublicRoute> <Login /> </PublicRoute> 
   },
   {
     path: "/admin/",
@@ -72,13 +70,8 @@ export const router = createBrowserRouter( [
     path: '/slider',
     element: <Slider />
   },
-  
   {
-    path: '/NoticiasOcultas',
-    element: <NoticiasOcultas />
-  },
-  {
-    path: "/*",
-    element: <Login />,
-  },
+    path: "*",
+    element: <NotFound />
+  }
 ] );

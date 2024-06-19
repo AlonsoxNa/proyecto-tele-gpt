@@ -5,6 +5,8 @@ import Navbar from "@/Componentes/Navbar";
 import MediaUpload from "../Componentes/MediaUpload";
 import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
+import { Grid, Typography } from "@mui/material";
+import CustomizedSnackbars from "@/components/shared/Snackbar";
 
 const Solofoto = () => {
   const [titulo, setTitulo] = useState("");
@@ -14,6 +16,16 @@ const Solofoto = () => {
   const [categoriaId, setCategoriaId] = useState("");
   const [categorias, setCategorias] = useState([]);
   const [errors, setErrors] = useState({});
+
+  const [msgAlert,setMsgAlert] = useState('')
+  const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
+  const [open, setOpen] = useState(false);
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   useEffect(() => {
     const fetchCategorias = async () => {
@@ -109,25 +121,30 @@ const Solofoto = () => {
 
     const hasErrors = Object.values(errors).some(error => error);
     if (hasErrors) {
-      alert("Por favor corrige los errores antes de enviar el formulario.");
+      setMsgAlert("Por favor corrige los errores antes de enviar el formulario.")
+      setSeverityAlert("warning")
+      setOpen(true)
       return;
     }
-    // console.log("duracion: ",duracion)
-    // console.log("titulo: ",titulo)
-    // console.log("tipo: ",tipo)
-    // console.log("multimedia: ",multimedia)
-    // console.log("extension: ",extension)
-    // console.log("categoriaId: ",categoriaId)
+    
     let response = await NoticiaService.registrarNoticiaFoto(duracion, titulo, tipo, multimedia, extension, categoriaId);
-    if (response) {
-      alert("Noticia foto registrada correctamente.");
-    } else {
-      alert("Error al registrar la noticia foto.");
+    if (response.success){
+      setMsgAlert(response.message)
+      setSeverityAlert("success")
+      setOpen(true)
+    }else{
+      setMsgAlert(response.message)
+      setSeverityAlert("error")
+      setOpen(true)
     }
   };
 
   return (
-    <>
+    <Grid container>
+      <Grid sx={{width:"100%", mb:"1.5rem" }}>
+        <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Registro Noticia: Sólo foto</Typography>
+      </Grid>
+      <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
           <div className="row">
@@ -186,7 +203,7 @@ const Solofoto = () => {
           <button type="submit" className="btn btn-primary">Crear Noticia Foto</button>
         </form>
       </div>
-    </>
+    </Grid>
   );
 };
 

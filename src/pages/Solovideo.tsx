@@ -5,6 +5,8 @@ import Navbar from "@/Componentes/Navbar";
 import MediaUpload from "../Componentes/MediaUpload";
 import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
+import { Grid, Typography } from "@mui/material";
+import CustomizedSnackbars from "@/components/shared/Snackbar";
 
 const Solovideo = () => {
   const [titulo, setTitulo] = useState("");
@@ -13,6 +15,16 @@ const Solovideo = () => {
   const [categorias, setCategorias] = useState([]);
   const [duracion, setDuracion] = useState(0);
   const [errors, setErrors] = useState({});
+
+  const [msgAlert,setMsgAlert] = useState('')
+  const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
+  const [open, setOpen] = useState(false);
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   useEffect(() => {
     const fetchCategorias = async () => {
@@ -94,24 +106,30 @@ const Solovideo = () => {
 
     const hasErrors = Object.values(errors).some(error => error);
     if (hasErrors) {
-      alert("Por favor corrige los errores antes de enviar el formulario.");
+      setMsgAlert("Por favor corrige los errores antes de enviar el formulario.")
+      setSeverityAlert("warning")
+      setOpen(true)
       return;
     }
 
-    try {
-      const response = await NoticiaService.registrarNoticiaVideo(duracion, titulo, tipo, multimediaUrl, categoriaId);
-      if (response) {
-        alert("Noticia video registrada correctamente.");
-      } else {
-        alert("Error al registrar la noticia video.");
-      }
-    } catch (error) {
-      alert("Error al registrar la noticia video.");
+    const response = await NoticiaService.registrarNoticiaVideo(duracion, titulo, tipo, multimediaUrl, categoriaId);
+    if (response.success){
+      setMsgAlert(response.message)
+      setSeverityAlert("success")
+      setOpen(true)
+    }else{
+      setMsgAlert(response.message)
+      setSeverityAlert("error")
+      setOpen(true)
     }
   };
 
   return (
-    <>
+    <Grid container>
+      <Grid sx={{width:"100%", mb:"1.5rem" }}>
+        <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Registro Noticia: Sólo video</Typography>
+      </Grid>
+      <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
           <div className="row">
@@ -157,7 +175,7 @@ const Solovideo = () => {
                 {errors.multimediaUrl && <div className="text-danger">{errors.multimediaUrl}</div>}
               </div>
               <div className="mb-3">
-                <label htmlFor="duracion" className="form-label">Duración en pantalla (segundos)</label>
+                <label htmlFor="duracion" className="form-label">Duración en pantalla segundos (Duración del video)</label>
                 <input 
                   type="number" 
                   id="duracion" 
@@ -175,7 +193,7 @@ const Solovideo = () => {
           <button type="submit" className="btn btn-primary">Crear Noticia Video</button>
         </form>
       </div>
-    </>
+    </Grid>
   );
 };
 
