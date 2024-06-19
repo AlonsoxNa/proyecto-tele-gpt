@@ -8,6 +8,10 @@
     overflow-y: scroll;
 }
 
+.bg-color-gray{
+  background-color: #c9d8e6;
+}
+
 .bg-image {
   position: absolute;
   top: 0;

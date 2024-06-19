@@ -130,9 +130,11 @@ export const Carrusel = () => {
     <div className="w-100 h-100">
       {
         noticias.length==0?
-        <>
-          <h1>No hay noticias por mostrar</h1>
-        </>
+        <div className='carousel-container'>
+          <div className='d-flex h-100 justify-content-center align-items-center bg-color-gray'>
+            <h1>No hay noticias por mostrar</h1>
+          </div>
+        </div>
         :
         <>
           <div ref={carouselRef} data-bs-interval="false" id="carouselExampleCaptions" className="carousel slide carousel-container" data-bs-ride="carousel">

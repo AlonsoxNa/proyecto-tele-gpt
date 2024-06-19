@@ -4,6 +4,7 @@ import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
 import { useLocation } from "react-router-dom";
 import CustomizedSnackbars from "@/components/shared/Snackbar";
+import { Grid, Typography } from "@mui/material";
 
 interface CategoriaInterface{
   id:string;
@@ -139,8 +140,11 @@ const ModificarSolotexto = () => {
   };
 
   return (
-    <>
-     <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
+    <Grid container>
+      <Grid sx={{width:"100%", mb:"1.5rem" }}>
+        <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Modificar Noticia: Sólo texto</Typography>
+      </Grid>
+      <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
           <div className="row">
@@ -207,7 +211,7 @@ const ModificarSolotexto = () => {
           <button type="submit" className="btn btn-primary">Modificar Publicación</button>
         </form>
       </div>
-    </>
+    </Grid>
   );
 };
 

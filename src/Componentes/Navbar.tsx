@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Navbar.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/stores/user.store';
-
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -12,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -20,11 +18,12 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Grid } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 
-const settings = ['Perfil', 'Cuenta', 'Cerrar sesión'];
+const settings = ['Perfil', 'Cerrar sesión'];
 
 const Navbar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const {handleLogout} = useUserStore();
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTardget);
@@ -57,7 +56,7 @@ const Navbar = () => {
     const { user } = useUserStore();
 
     return (
-        <AppBar component="nav">
+        <AppBar component="nav" sx={{backgroundColor:"#0f2357"}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                 <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -65,7 +64,7 @@ const Navbar = () => {
                     variant="h6"
                     noWrap
                     component="a"
-                    href="#app-bar-with-responsive-menu"
+                    href="/admin/noticias"
                     sx={{
                     mr: 2,
                     display: { xs: 'none', md: 'flex' },
@@ -76,73 +75,17 @@ const Navbar = () => {
                     textDecoration: 'none',
                     }}
                 >
-                    LOGO
+                    ICC TV
                 </Typography>
-
-                {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                    <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={handleOpenNavMenu}
-                    color="inherit"
-                    >
-                    <MenuIcon />
-                    </IconButton>
-                    <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorElNav}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                    }}
-                    open={Boolean(anchorElNav)}
-                    onClose={handleCloseNavMenu}
-                    sx={{
-                        display: { xs: 'block', md: 'none' },
-                    }}
-                    >
-                    {pages.map((page) => (
-                        <MenuItem key={page} onClick={handleCloseNavMenu}>
-                            <Typography textAlign="center">{page}</Typography>
-                        </MenuItem>
-                    ))}
-                    </Menu>
-                </Box> */}
-                <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-                <Typography
-                    variant="h5"
-                    noWrap
-                    component="a"
-                    href="#app-bar-with-responsive-menu"
-                    sx={{
-                    mr: 2,
-                    display: { xs: 'flex', md: 'none' },
-                    flexGrow: 1,
-                    fontFamily: 'monospace',
-                    fontWeight: 700,
-                    letterSpacing: '.3rem',
-                    color: 'inherit',
-                    textDecoration: 'none',
-                    }}
-                >
-                    LOGO
-                </Typography>
-                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    {/* {pages.map((page) => ( */}
-                    <Button
-                        onClick={() => {handleClose;goPage('noticias')}}
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                    >
-                        Noticias
-                    </Button>
-                    <Grid container>
+                <Box  paddingLeft='2rem' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'} }}>
+                    
+                    <Grid container gap={2}>
+                        <Button
+                            onClick={() => {handleClose;goPage('noticias')}}
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                            Noticias
+                        </Button>
                         <Button sx={{color:"white"}}
                             id="basic-button"
                             aria-controls={open ? 'basic-menu' : undefined}
@@ -174,7 +117,6 @@ const Navbar = () => {
                             Ayuda
                         </Button>
                     </Grid>
-                    {/* ))} */}
                 </Box>
 
                 <Box sx={{ flexGrow: 0 }}>
@@ -184,7 +126,7 @@ const Navbar = () => {
                             aria-label="account of current user"
                             aria-controls="menu-appbar"
                             aria-haspopup="true" sx={{ p: 0 }}>
-                            <AccountCircle />
+                            <AccountCircle fontSize='large'/>
                         </IconButton>
                     </Tooltip>
                     <Menu
@@ -203,11 +145,17 @@ const Navbar = () => {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                     >
-                    {settings.map((setting) => (
+                        <MenuItem onClick={handleCloseUserMenu}>
+                            <Typography textAlign="center">Perfil</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={handleLogout}>
+                            <Typography textAlign="center">Cerrar Sesión</Typography>
+                        </MenuItem>
+                    {/* {settings.map((setting) => (
                         <MenuItem key={setting} onClick={handleCloseUserMenu}>
                             <Typography textAlign="center">{setting}</Typography>
                         </MenuItem>
-                    ))}
+                    ))} */}
                     </Menu>
                 </Box>
                 </Toolbar>
