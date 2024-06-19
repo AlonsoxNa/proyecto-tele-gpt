@@ -4,6 +4,7 @@ import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
 import { useLocation } from "react-router-dom";
 import CustomizedSnackbars from "@/components/shared/Snackbar";
+import { Grid, Typography } from "@mui/material";
 
 interface CategoriaInterface{
   id:string;
@@ -169,7 +170,10 @@ const ModificarNoticiaNormal = () => {
   };
 
   return (
-    <>
+    <Grid container>
+      <Grid sx={{width:"100%", mb:"1.5rem" }}>
+        <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Modificar Noticia: Normal</Typography>
+      </Grid>
       <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
@@ -243,7 +247,7 @@ const ModificarNoticiaNormal = () => {
           <button type="submit" className="btn btn-primary">Modificar Noticia</button>
         </form>
       </div>
-    </>
+    </Grid>
   );
 };
 

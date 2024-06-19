@@ -32,8 +32,8 @@ export const LoginForm: FC = () => {
 
   const handleClickShowPassword = () => setShowPassword( ( show ) => !show );
 
-  const handleCloseLoading = () => {
-    setIsLoading( false );
+  const handleCloseLoading = (valor:boolean) => {
+    setIsLoading( valor );
   };
 
   const handleSubmit = async ( e: FormEvent<HTMLFormElement> ) => {
@@ -42,22 +42,22 @@ export const LoginForm: FC = () => {
 
     const errors = await handleValidateAll();
     if ( errors.length === 0 ) {
+      handleCloseLoading(true);
       const response: responseAuth = await login( form.email, form.password ) as responseAuth;
-
+      
       if ( response.status === 200 ) {
         handleLogin( response.data.name, form.email, response.data.token );
-        handleCloseLoading();
         navigate( '/admin/noticias' );
-      } else if ( response.response.status === 204 ) {
+      } else if ( response.status === 204 ) {
         setMessageSnackbar( "El usuario no existe" );
-      } else if ( response.response.status === 409 ) {
+      } else if ( response.status === 409 ) {
         setMessageSnackbar( "Correo o contraseña incorrectos" );
       } else {
         setMessageSnackbar( "Error al iniciar sesión" );
       }
       setOpenSnackbar( true );
+      handleCloseLoading(false);
     }
-    handleCloseLoading();
   };
 
   return (

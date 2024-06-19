@@ -169,27 +169,32 @@ const NoticiaService ={
             return {success:false,message:message};
         }
     },
-    registrarNoticiaVideo: async (duracion: number, titulo: string, multimedia_url : string, categoriaId : string ) => {
+    registrarNoticiaVideo: async (duracion: number, titulo: string, tipo:string, multimedia_url : string, categoriaId : string ) => {
         try {
             const response = await axios.patch(`${API_URL}/noticia/noticia-video`, {
 
-                duracion, titulo, multimedia_url, categoriaId
+                duracion, titulo,tipo, multimedia_url, categoriaId
             }, {
                 headers: {
                     Authorization: `Bearer ${useUserStore.getState().user.token}`
                 }
             });
             if (response.status === 201) {
-                console.log("Modificar noticia video registrada correctamente.");
-                return true;
+                return {success:true,message:'Noticia registrada correctamente'}
             }
             else {
-                console.log(response)
-                return false;
+                return {success:false,message:'No se pudo registrar la noticia'}
             }
-        } catch (error) {
-            console.error('Error al modificar noticia video', error);
-            return false;
+        } catch (error:any) {
+            let message = '';
+            if (error.response.status == 400){
+                message = 'Error de los campos del formulario, no son válidos'
+            }else if (error.response.status == 409){
+                message = 'Conflicto al registrar'
+            }else{
+                message = 'Error en el servior'
+            }
+            return {success:true,message:message}
         }
     },
     registrarNoticiaNormal: async (duracion: number, titulo: string, contenido : string, tipo : string, multimedia : string, extension : string, categoriaId : string ) => {
@@ -203,16 +208,21 @@ const NoticiaService ={
                 }
             });
             if (response.status === 201) {
-                console.log("Noticia normal registrada correctamente.");
-                return true;
+                return {success:true,message:'Noticia registrada correctamente'}
             }
             else {
-                console.log(response)
-                return false;
+                return {success:false,message:'No se pudo registrar la noticia'}
             }
-        } catch (error) {
-            console.error('Error al registrar noticia normal', error);
-            return false;
+        } catch (error:any) {
+            let message = '';
+            if (error.response.status == 400){
+                message = 'Error de los campos del formulario, no son válidos'
+            }else if (error.response.status == 409){
+                message = 'Conflicto al registrar'
+            }else{
+                message = 'Error en el servior'
+            }
+            return {success:true,message:message}
         }
     },
     registrarNoticiaPublicacion: async (duracion: number, titulo: string, contenido : string, tipo : string, categoriaId : string ) => {
@@ -226,16 +236,21 @@ const NoticiaService ={
                 }
             });
             if (response.status === 201) {
-                console.log("Noticia publicacion registrada correctamente.");
-                return true;
+                return {success:true,message:'Noticia registrada correctamente'}
             }
             else {
-                console.log(response)
-                return false;
+                return {success:false,message:'No se pudo registrar la noticia'}
             }
-        } catch (error) {
-            console.error('Error al registrar noticia publicacion', error);
-            return false;
+        } catch (error:any) {
+            let message = '';
+            if (error.response.status == 400){
+                message = 'Error de los campos del formulario, no son válidos'
+            }else if (error.response.status == 409){
+                message = 'Conflicto al registrar'
+            }else{
+                message = 'Error en el servior'
+            }
+            return {success:true,message:message}
         }
     },
     registrarNoticiaFoto: async (duracion: number, titulo: string, tipo : string, multimedia : string, extension : string, categoriaId : string ) => {
@@ -249,41 +264,22 @@ const NoticiaService ={
                 }
             });
             if (response.status === 201) {
-                console.log("Noticia foto registrada correctamente.");
-                return true;
+                return {success:true,message:'Noticia registrada correctamente'}
             }
             else {
-                console.log(response)
-                return false;
+                return {success:false,message:'No se pudo registrar la noticia'}
             }
-        } catch (error) {
-            console.error('Error al registrar noticia foto', error);
-            return false;
+        } catch (error:any) {
+            let message = '';
+            if (error.response.status == 400){
+                message = 'Error de los campos del formulario, no son válidos'
+            }else if (error.response.status == 409){
+                message = 'Conflicto al registrar'
+            }else{
+                message = 'Error en el servior'
+            }
+            return {success:true,message:message}
         }
-    },
-    // registrarNoticiaVideo: async (duracion: number, titulo: string, tipo : string, multimedia_url : string, categoriaId : string ) => {
-    //     try {
-    //         const response = await axios.post(`${API_URL}/noticia/noticia-video`, {
-
-    //             duracion, titulo, tipo, multimedia_url, categoriaId
-    //         }, {
-    //             headers: {
-    //                 Authorization: `Bearer ${useUserStore.getState().user.token}`
-    //             }
-    //         });
-    //         if (response.status === 201) {
-    //             console.log("Noticia video registrada correctamente.");
-    //             return true;
-    //         }
-    //         else {
-    //             console.log(response)
-    //             return false;
-    //         }
-    //     } catch (error) {
-    //         console.error('Error al registrar noticia video', error);
-    //         return false;
-    //     }
-    // }
-
+    }
 }
 export default NoticiaService;
