@@ -52,7 +52,6 @@ const Navbar = () => {
         <AppBar component="nav" sx={{backgroundColor:"#0f2357"}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                 <Typography
                     variant="h6"
                     noWrap
@@ -68,7 +67,7 @@ const Navbar = () => {
                     textDecoration: 'none',
                     }}
                 >
-                    ICC TV
+                    ICC-TV
                 </Typography>
                 <Box  paddingLeft='2rem' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'} }}>
                     
@@ -77,7 +76,7 @@ const Navbar = () => {
                             onClick={() => {handleClose;goPage('noticias')}}
                             sx={{ my: 2, color: 'white', display: 'block' }}
                         >
-                            Noticias
+                            Gestión noticias
                         </Button>
                         <Button sx={{color:"white"}}
                             id="basic-button"
@@ -104,6 +103,18 @@ const Navbar = () => {
                             <MenuItem onClick={() => {handleClose;goPage('Solotexto')}}>Solo texto</MenuItem>
                         </Menu>
                         <Button
+                            onClick={() => {handleClose;goPage('crear-categoria')}}
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                            Crear categoría
+                        </Button>
+                        <Button
+                            onClick={() => {handleClose;goPage('gestion-categoria')}}
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                            Gestión categorías
+                        </Button>
+                        <Button
                             onClick={() => {handleClose;goPage('Ayuda')}}
                             sx={{ my: 2, color: 'white', display: 'block' }}
                         >
@@ -113,15 +124,13 @@ const Navbar = () => {
                 </Box>
 
                 <Box sx={{ flexGrow: 0 }}>
-                    <Tooltip title="Abrir configuracion">
-                        <IconButton onClick={handleOpenUserMenu}
-                            size="large" color="inherit"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true" sx={{ p: 0 }}>
-                            <AccountCircle fontSize='large'/>
-                        </IconButton>
-                    </Tooltip>
+                    <IconButton onClick={handleOpenUserMenu}
+                        size="large" color="inherit"
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true" sx={{ p: 0 }}>
+                        <AccountCircle fontSize='large'/>
+                    </IconButton>
                     <Menu
                     sx={{ mt: '45px' }}
                     id="menu-appbar"

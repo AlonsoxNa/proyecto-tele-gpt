@@ -21,7 +21,7 @@ const ModificarSolofoto = () => {
   const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
   const [errors, setErrors] = useState<any>({});
 
-  const [ isLoading, setIsLoading ] = useState( true );
+  const [ isLoading, setIsLoading ] = useState( false );
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')

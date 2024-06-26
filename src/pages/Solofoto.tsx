@@ -15,7 +15,7 @@ const Solofoto = () => {
   const [categorias, setCategorias] = useState([]);
   const [errors, setErrors] = useState<any>({});
 
-  const [ isLoading, setIsLoading ] = useState( true );
+  const [ isLoading, setIsLoading ] = useState( false );
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')

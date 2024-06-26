@@ -16,6 +16,8 @@ import NotFound from "@/pages/NotFound";
 import Solofoto from '../pages/Solofoto';
 import Solotexto from '../pages/Solotexto';
 import Solovideo from '../pages/Solovideo';
+import CrearCategoría from '@/pages/categoria/CrearCategoría';
+import GestionCategoria from '@/pages/categoria/GestionCategoria';
 
 export const router = createBrowserRouter( [
   {
@@ -57,10 +59,15 @@ export const router = createBrowserRouter( [
       },{
         path: "modificar-texto",
         element: <ModificarSolotexto />,
-      }
-      ,{
+      },{
         path: "Ayuda",
         element: <Ayuda />,
+      },{
+        path: "crear-categoria",
+        element: <CrearCategoría />,
+      },{
+        path: "gestion-categoria",
+        element: <GestionCategoria />,
       }
     ]
   },

@@ -25,6 +25,60 @@ const CategoriaService ={
             return [];
         }
     },
-
+    registrarCategoria: async (nombre:string) => {
+        try {
+            const response = await axios.post(`${API_URL}/categoria`,{
+                nombre:nombre
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 201) {
+                return {success:true,message:'Categoria registrada'};
+            }
+            else {
+                return {success:false,message:'No se pudo registrar la categoría'};
+            }
+        } catch (error) {
+            return {success:false,message:'No se pudo registrar la categoría'};
+        }
+    },
+    modificarCategoria: async (nombre:string) => {
+        try {
+            const response = await axios.patch(`${API_URL}/categoria`,{
+                nombre:nombre
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200) {
+                return {success:true,message:'Categoria actualizada'};
+            }
+            else {
+                return {success:false,message:'No se pudo actualizar la categoría'};
+            }
+        } catch (error) {
+            return {success:false,message:'No se pudo actualizar la categoría'};
+        }
+    },
+    eliminarCategoria: async (id:string) => {
+        try {
+            const response = await axios.delete(`${API_URL}/categoria?id=${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200) {
+                return {success:true,message:'Categoria eliminada'};
+            }
+            else {
+                return {success:false,message:'No se pudo eliminada la categoría'};
+            }
+        } catch (error) {
+            return {success:false,message:'No se pudo eliminada la categoría'};
+        }
+    }
 }
 export default CategoriaService;
