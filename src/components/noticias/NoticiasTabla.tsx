@@ -13,6 +13,7 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { convertirTipoNoticia } from '@/utils/noticias/convertirTipoNoticia';
 import { estilosTipoNoticia } from '@/assets/noticias/tipoNoticia';
 import { useNavigate } from 'react-router-dom';
+import AlertDialog from '../shared/AlertDialog';
 
 
 export const NoticiasTabla: FC = () => {
@@ -26,8 +27,14 @@ export const NoticiasTabla: FC = () => {
   const [ messageSnackbar, setMessageSnackbar ] = useState<string>( "" );
   const [ isError, setIsError ] = useState<boolean>( false );
 
-  const navigate = useNavigate()
+  const [textoAlert,setTextoAlert] = useState('')
+  const [openAlert, setOpenAlert] = useState(false)
+  const [idSelect, setIdSelect] = useState('')
+  const [stateSelect, setStateSelect] = useState(true)
+  const [tituloAlert, setTituloAlert] = useState('')
+  const [actionType, setActionType] = useState<string>('');
 
+  const navigate = useNavigate()
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar( false );
@@ -94,6 +101,16 @@ export const NoticiasTabla: FC = () => {
       handleClear();
     }
   };
+
+  const handleOpen = (action: string) => {
+    setActionType(action);
+    setOpenAlert(true);
+  }
+
+  const handleClose = () => {
+    setOpenAlert(false);
+    setActionType('');
+  }
 
   return (
     <TableContainer>
@@ -212,12 +229,28 @@ export const NoticiasTabla: FC = () => {
 
                 <Stack direction="row" spacing={ 1 }>
                   <IconButton sx={ { width: 'auto', backgroundColor: '#ffc6ba' } } color="error" 
-                  onClick={ () => handleDeleteNoticia(row.id) }
+                  // onClick={ () => handleDeleteNoticia(row.id) }
+                  onClick={ () => {
+                    setActionType('Eliminar')
+                    setTextoAlert(`¿Quieres eliminar la noticia: "${row.titulo}"?`)
+                    setTituloAlert('Eliminar registro')
+                    setIdSelect(row.id)
+                    setOpenAlert(true)
+                  } }
                   ><DeleteIcon /></IconButton>
+
                   <IconButton
                     sx={ { width: 'auto', backgroundColor: row.habilitado ? '#ffc6ba' : '#c7ffc9' } }
                     color={ row.habilitado ? 'error' : 'success' }
-                    onClick={ () => handleChangeStatusNoticia( row.id, row.habilitado ) }
+                    // onClick={ () => handleChangeStatusNoticia( row.id, row.habilitado ) }
+                    onClick={ () => {
+                      setActionType('Editar')
+                      setTextoAlert(`¿Quieres ocultar la noticia: "${row.titulo}"?`)
+                      setTituloAlert('Ocultar registro')
+                      setIdSelect(row.id)
+                      setStateSelect(row.habilitado)
+                      setOpenAlert(true)
+                    } }
                   >
                     { row.habilitado ? <RemoveCircleIcon /> : <AddCircleIcon /> }
                   </IconButton>
@@ -247,6 +280,12 @@ export const NoticiasTabla: FC = () => {
           { messageSnackbar }
         </Alert>
       </Snackbar>
+      <AlertDialog texto={textoAlert} open={openAlert} tituloDialog={tituloAlert}
+       handleClose={()=>setOpenAlert(false)}
+       handleConfirmation={()=>{
+        {actionType=='Editar'? handleChangeStatusNoticia(idSelect,stateSelect):handleDeleteNoticia(idSelect)}
+        setOpenAlert(false);
+        }}  />
     </TableContainer >
   );
 };
