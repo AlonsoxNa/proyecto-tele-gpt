@@ -5,6 +5,7 @@ import CategoriaService from "@/services/CategoriaService";
 import { useLocation } from "react-router-dom";
 import CustomizedSnackbars from "@/components/shared/Snackbar";
 import { Grid, Typography } from "@mui/material";
+import { CustomProgress } from "@/components/shared/CustomProgress";
 
 interface CategoriaInterface{
   id:string;
@@ -19,6 +20,8 @@ const ModificarSolofoto = () => {
   const [categoriaId, setCategoriaId] = useState("");
   const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
   const [errors, setErrors] = useState<any>({});
+
+  const [ isLoading, setIsLoading ] = useState( false );
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
@@ -48,8 +51,10 @@ const ModificarSolofoto = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true)
     fetchCategorias();
     getInfo();
+    setIsLoading(false)
   }, []);
 
   const validateField = (field:string, value:any) => {
@@ -141,13 +146,9 @@ const ModificarSolofoto = () => {
       setOpen(true)
       return;
     }
-    // console.log("duracion: ",duracion)
-    // console.log("titulo: ",titulo)
-    // console.log("tipo: ",tipo)
-    // console.log("multimedia: ",multimedia)
-    // console.log("extension: ",extension)
-    // console.log("categoriaId: ",categoriaId)
+    setIsLoading(true)
     let response = await NoticiaService.modificarNoticiaFoto(id, duracion, titulo, multimedia, extension, categoriaId);
+    setIsLoading(false)
     if (response.success){
       setMsgAlert(response.message)
       setSeverityAlert("success")
@@ -164,6 +165,7 @@ const ModificarSolofoto = () => {
       <Grid sx={{width:"100%", mb:"1.5rem" }}>
         <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Modificar Noticia: Sólo foto</Typography>
       </Grid>
+      <CustomProgress open={isLoading} />
       <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
@@ -212,11 +214,19 @@ const ModificarSolofoto = () => {
                 {errors.duracion && <div className="text-danger">{errors.duracion}</div>}
               </div>
               <div className="mb-3">
-                <label htmlFor="mediaUpload" className="form-label">Sube la foto</label>
-                <input type="file" accept='.png,.jpg,.jpeg' onChange={handleImagenChange} className=""/>
-                {/* <MediaUpload onFileChange={handleMultimediaChange} /> */}
+                <div>
+                  <label htmlFor="mediaUpload" className="form-label">Sube foto de la noticia</label>
+                  
+                </div>
+                <div>
+                <input type="file" accept='.png,.jpg,.jpeg' style={{ display: 'none' }}  onChange={handleImagenChange} className=""/>
+                  <label htmlFor="inputArchivo" style={{ cursor: 'pointer', padding: '', border: '1px solid #ccc' }}>
+                      {multimedia ? `Archivo seleccionado` : 'Seleccione una imagen'}
+                  </label>
+                </div>
                 {errors.multimedia && <div className="text-danger">{errors.multimedia}</div>}
                 {errors.extension && <div className="text-danger">{errors.extension}</div>}
+                {multimedia && <img src={`data:image/${extension};base64,${multimedia}`} alt="Preview" style={{ maxWidth: '100%', marginTop: '10px' }} />}
               </div>
             </div>
           </div>

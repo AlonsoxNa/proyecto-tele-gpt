@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import NoticiaService from "../services/Noticias";
 import { ErrorValidation, Categoria } from '@/interfaces/crear-anuncio';
+import { CustomProgress } from "@/components/shared/CustomProgress";
 
 const Solovideo = () => {
   const [titulo, setTitulo] = useState("");
@@ -13,6 +14,8 @@ const Solovideo = () => {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [duracion, setDuracion] = useState(0);
   const [errors, setErrors] = useState<ErrorValidation>({});
+
+  const [ isLoading, setIsLoading ] = useState( false );
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
@@ -29,7 +32,9 @@ const Solovideo = () => {
       const response = await CategoriaService.obtenerCategorias();
       setCategorias(response);
     };
+    setIsLoading(true)
     fetchCategorias();
+    setIsLoading(false)
   }, []);
 
   const validateField = (field: string, value: string) => {
@@ -111,8 +116,9 @@ const Solovideo = () => {
       setOpen(true)
       return;
     }
-
+    setIsLoading(true)
     const response = await NoticiaService.registrarNoticiaVideo(duracion, titulo, tipo, multimediaUrl, categoriaId);
+    setIsLoading(false)
     if (response.success){
       setMsgAlert(response.message)
       setSeverityAlert("success")
@@ -129,6 +135,7 @@ const Solovideo = () => {
       <Grid sx={{width:"100%", mb:"1.5rem" }}>
         <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Registro Noticia: Sólo video</Typography>
       </Grid>
+      <CustomProgress open={isLoading} />
       <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
