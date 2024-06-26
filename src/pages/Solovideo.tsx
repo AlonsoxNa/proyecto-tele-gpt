@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from "@/Componentes/Navbar";
-import MediaUpload from "../Componentes/MediaUpload";
-import NoticiaService from "../services/Noticias";
+import CustomizedSnackbars from "@/components/shared/Snackbar";
 import CategoriaService from "@/services/CategoriaService";
 import { Grid, Typography } from "@mui/material";
-import CustomizedSnackbars from "@/components/shared/Snackbar";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import NoticiaService from "../services/Noticias";
+import { ErrorValidation, Categoria } from '@/interfaces/crear-anuncio';
 
 const Solovideo = () => {
   const [titulo, setTitulo] = useState("");
   const [multimediaUrl, setMultimediaUrl] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
-  const [categorias, setCategorias] = useState([]);
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [duracion, setDuracion] = useState(0);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<ErrorValidation>({});
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
   const [open, setOpen] = useState(false);
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = (reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -34,8 +32,10 @@ const Solovideo = () => {
     fetchCategorias();
   }, []);
 
-  const validateField = (field, value) => {
+  const validateField = (field: string, value: string) => {
     let error = "";
+    const youtubeRegex = /^(https?:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
+    
     switch (field) {
       case "titulo":
         if (!value) {
@@ -47,7 +47,7 @@ const Solovideo = () => {
         }
         break;
       case "multimediaUrl":
-        const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
+        
         if (!value) {
           error = "El URL del video es obligatorio";
         } else if (!youtubeRegex.test(value)) {
@@ -60,7 +60,7 @@ const Solovideo = () => {
         }
         break;
       case "duracion":
-        if (value < 1 || value > 300) {
+        if (Number(value) < 1 || Number(value) > 300) {
           error = "La duración debe ser entre 1 y 300 segundos";
         }
         break;
@@ -70,31 +70,31 @@ const Solovideo = () => {
     setErrors(prevErrors => ({ ...prevErrors, [field]: error }));
   };
 
-  const handleTituloChange = (e) => {
-    const value = e.target.value;
+  const handleTituloChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const value = target.value;
     setTitulo(value);
     validateField("titulo", value);
   };
 
-  const handleMultimediaUrlChange = (e) => {
-    const value = e.target.value;
+  const handleMultimediaUrlChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const value = target.value;
     setMultimediaUrl(value);
     validateField("multimediaUrl", value);
   };
 
-  const handleCategoriaChange = (e) => {
-    const value = e.target.value;
+  const handleCategoriaChange = ({ target }: ChangeEvent<HTMLSelectElement>) => {
+    const value = target.value;
     setCategoriaId(value);
     validateField("categoriaId", value);
   };
 
-  const handleDuracionChange = (e) => {
-    const value = parseInt(e.target.value, 10);
+  const handleDuracionChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(target.value, 10);
     setDuracion(value);
-    validateField("duracion", value);
+    validateField("duracion", String(value));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const tipo = "Url";
 
@@ -102,7 +102,7 @@ const Solovideo = () => {
     validateField("titulo", titulo);
     validateField("multimediaUrl", multimediaUrl);
     validateField("categoriaId", categoriaId);
-    validateField("duracion", duracion);
+    validateField("duracion", String(duracion));
 
     const hasErrors = Object.values(errors).some(error => error);
     if (hasErrors) {

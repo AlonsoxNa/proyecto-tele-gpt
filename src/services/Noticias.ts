@@ -25,7 +25,7 @@ const NoticiaService ={
             return [];
         }
     },
-    obtenerNoticiaPorId: async (id) => {
+    obtenerNoticiaPorId: async (id: string) => {
         try {
           const response = await axios.get(`${API_URL}/noticia/find-by-id`, {
             params: {
@@ -171,7 +171,7 @@ const NoticiaService ={
     },
     registrarNoticiaVideo: async (duracion: number, titulo: string, tipo:string, multimedia_url : string, categoriaId : string ) => {
         try {
-            const response = await axios.patch(`${API_URL}/noticia/noticia-video`, {
+            const response = await axios.post(`${API_URL}/noticia/noticia-video`, {
 
                 duracion, titulo,tipo, multimedia_url, categoriaId
             }, {
@@ -194,7 +194,7 @@ const NoticiaService ={
             }else{
                 message = 'Error en el servior'
             }
-            return {success:true,message:message}
+            return {success:false,message:message}
         }
     },
     registrarNoticiaNormal: async (duracion: number, titulo: string, contenido : string, tipo : string, multimedia : string, extension : string, categoriaId : string ) => {
@@ -222,7 +222,7 @@ const NoticiaService ={
             }else{
                 message = 'Error en el servior'
             }
-            return {success:true,message:message}
+            return {success: false,message:message}
         }
     },
     registrarNoticiaPublicacion: async (duracion: number, titulo: string, contenido : string, tipo : string, categoriaId : string ) => {
@@ -250,7 +250,7 @@ const NoticiaService ={
             }else{
                 message = 'Error en el servior'
             }
-            return {success:true,message:message}
+            return {success:false,message:message}
         }
     },
     registrarNoticiaFoto: async (duracion: number, titulo: string, tipo : string, multimedia : string, extension : string, categoriaId : string ) => {
@@ -278,7 +278,7 @@ const NoticiaService ={
             }else{
                 message = 'Error en el servior'
             }
-            return {success:true,message:message}
+            return {success:false,message:message}
         }
     }
 }

@@ -1,28 +1,26 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from "@/Componentes/Navbar";
-import { SelecctorFechas } from "@/Componentes/SelecctorFechas";
-import MediaUpload from "../Componentes/MediaUpload";
-import NoticiaService from "../services/Noticias";
+import CustomizedSnackbars from "@/components/shared/Snackbar";
+import { Categoria, ErrorValidation } from "@/interfaces/crear-anuncio";
 import CategoriaService from "@/services/CategoriaService";
 import { Grid, Typography } from "@mui/material";
-import CustomizedSnackbars from "@/components/shared/Snackbar";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import NoticiaService from "../services/Noticias";
+
 
 const CrearAnuncio = () => {
   const [titulo, setTitulo] = useState("");
   const [contenido, setContenido] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
-  const [categorias, setCategorias] = useState([]);
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [duracion, setDuracion] = useState(0);
   const [multimedia, setMultimedia] = useState("");
   const [extension, setExtension] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<ErrorValidation>({});
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
   const [open, setOpen] = useState(false);
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = (reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -38,7 +36,7 @@ const CrearAnuncio = () => {
     fetchCategorias();
   }, []);
 
-  const validateField = (field, value) => {
+  const validateField = (field: string, value: string) => {
     let error = "";
     switch (field) {
       case "titulo":
@@ -65,7 +63,7 @@ const CrearAnuncio = () => {
         }
         break;
       case "duracion":
-        if (value < 1 || value > 300) {
+        if (Number(value) < 1 || Number(value) > 300) {
           error = "La duración debe ser entre 1 y 300 segundos";
         }
         break;
@@ -85,61 +83,56 @@ const CrearAnuncio = () => {
     setErrors(prevErrors => ({ ...prevErrors, [field]: error }));
   };
 
-  const handleTituloChange = (e) => {
-    const value = e.target.value;
+  const handleTituloChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const value = target.value;
     setTitulo(value);
     validateField("titulo", value);
   };
 
-  const handleContenidoChange = (e) => {
-    const value = e.target.value;
+  const handleContenidoChange = ({ target }: ChangeEvent<HTMLTextAreaElement>) => {
+    const value = target.value;
     setContenido(value);
     validateField("contenido", value);
   };
 
-  const handleCategoriaChange = (e) => {
-    const value = e.target.value;
+  const handleCategoriaChange = ({ target }: ChangeEvent<HTMLSelectElement>) => {
+    const value = target.value;
     setCategoriaId(value);
     validateField("categoriaId", value);
   };
 
-  const handleDuracionChange = (e) => {
-    const value = parseInt(e.target.value, 10);
+  const handleDuracionChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(target.value, 10);
     setDuracion(value);
-    validateField("duracion", value);
+    validateField("duracion", String(value));
   };
 
-  const handleImagenChange = (event) => {
-    const file = event.target.files[0];
+  const handleImagenChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const file = target.files![0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result.split(',')[1]; // Obtener solo el contenido base64 sin el prefijo
+        const resultString = String(reader.result);
+        const base64String = resultString.split(',')[1]; // Obtener solo el contenido base64 sin el prefijo
         setMultimedia(base64String);
         const fileExtension = file.name.split('.').pop();
-        setExtension(fileExtension);
+        setExtension(fileExtension!);
+        validateField("multimedia", base64String);
+        validateField("extension", fileExtension!);
       };
       reader.readAsDataURL(file);
     }
+    
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const tipo = "Normal";
-    const data = {
-      duracion,
-      titulo,
-      contenido,
-      tipo,
-      multimedia,
-      extension,
-      categoriaId
-    };
     
     validateField("titulo", titulo);
     validateField("contenido", contenido);
     validateField("categoriaId", categoriaId);
-    validateField("duracion", duracion);
+    validateField("duracion", String(duracion));
     validateField("multimedia", multimedia);
     validateField("extension", extension);
 
@@ -151,7 +144,7 @@ const CrearAnuncio = () => {
       return;
     }
 
-    let response = await NoticiaService.registrarNoticiaNormal(duracion, titulo, contenido, tipo, multimedia, extension, categoriaId);
+    const response = await NoticiaService.registrarNoticiaNormal(duracion, titulo, contenido, tipo, multimedia, extension, categoriaId);
     if (response.success){
       setMsgAlert(response.message)
       setSeverityAlert("success")

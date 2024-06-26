@@ -1,23 +1,21 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
-import { HomeTemporal } from '../pages/HomeTemporal';
-import CrearAnuncio from '../pages/CrearAnuncio';
-import Solofoto from '../pages/Solofoto';
-import Solovideo from '../pages/Solovideo';
-import Solotexto from '../pages/Solotexto';
 //import { Dashboard } from '../pages/Dashboard';
 import  Ayuda  from '../pages/Ayuda';
-import { Noticias } from '../pages/Noticias';
-import { Slider } from '../pages/Slider';
-import NoticiasOcultas from "../pages/NoticiasOcultas";
-import { Login } from '@/pages/Login';
 import { Layout } from '@/components/layout/Layout';
+import { Login } from '@/pages/Login';
+import { Navigate, createBrowserRouter } from "react-router-dom";
+import { Noticias } from '../pages/Noticias';
 import { PrivateRoute } from './PrivateRoute';
+import { PublicRoute } from "./PublicRoute";
+import { Slider } from '../pages/Slider';
+import CrearAnuncio from '../pages/CrearAnuncio';
 import ModificarNoticiaNormal from "@/pages/ModificarNoticiaNormal";
 import ModificarSolofoto from "@/pages/ModificarSolofoto";
-import ModificarSolovideo from "@/pages/ModificarSolovideo";
 import ModificarSolotexto from "@/pages/ModificarSolotexto";
+import ModificarSolovideo from "@/pages/ModificarSolovideo";
 import NotFound from "@/pages/NotFound";
-import { PublicRoute } from "./PublicRoute";
+import Solofoto from '../pages/Solofoto';
+import Solotexto from '../pages/Solotexto';
+import Solovideo from '../pages/Solovideo';
 
 export const router = createBrowserRouter( [
   {
@@ -73,5 +71,9 @@ export const router = createBrowserRouter( [
   {
     path: "*",
     element: <NotFound />
+  },
+  {
+    path: "/",
+    element: <Navigate to="/login" />
   }
 ] );
