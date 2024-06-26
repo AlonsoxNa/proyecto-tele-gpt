@@ -48,9 +48,7 @@ export const LoginForm: FC = () => {
       if ( response.status === 200 ) {
         handleLogin( response.data.name, form.email, response.data.token );
         navigate( '/admin/noticias' );
-      } else if ( response.status === 204 ) {
-        setMessageSnackbar( "El usuario no existe" );
-      } else if ( response.status === 409 ) {
+      } else if ( response.status === 204 || response.response.status === 409) {
         setMessageSnackbar( "Correo o contraseña incorrectos" );
       } else {
         setMessageSnackbar( "Error al iniciar sesión" );
