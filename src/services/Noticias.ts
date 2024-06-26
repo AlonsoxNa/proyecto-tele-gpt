@@ -171,7 +171,7 @@ const NoticiaService ={
     },
     registrarNoticiaVideo: async (duracion: number, titulo: string, tipo:string, multimedia_url : string, categoriaId : string ) => {
         try {
-            const response = await axios.patch(`${API_URL}/noticia/noticia-video`, {
+            const response = await axios.post(`${API_URL}/noticia/noticia-video`, {
 
                 duracion, titulo,tipo, multimedia_url, categoriaId
             }, {

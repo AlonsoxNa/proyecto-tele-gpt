@@ -4,5 +4,6 @@ export interface ErrorValidation {
   categoriaId?: string;
   duracion?: string;
   multimedia?: string;
+  multimediaUrl?: string;
   extension?: string;
 }
