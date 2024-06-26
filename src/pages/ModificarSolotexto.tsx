@@ -5,6 +5,7 @@ import CategoriaService from "@/services/CategoriaService";
 import { useLocation } from "react-router-dom";
 import CustomizedSnackbars from "@/components/shared/Snackbar";
 import { Grid, Typography } from "@mui/material";
+import { CustomProgress } from "@/components/shared/CustomProgress";
 
 interface CategoriaInterface{
   id:string;
@@ -18,6 +19,8 @@ const ModificarSolotexto = () => {
   const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
   const [duracion, setDuracion] = useState(0);
   const [errors, setErrors] = useState<any>({});
+
+  const [ isLoading, setIsLoading ] = useState( true );
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
@@ -46,8 +49,10 @@ const ModificarSolotexto = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true)
     fetchCategorias();
     getInfo();
+    setIsLoading(false)
   }, []);
 
   const validateField = (field:string, value:any) => {
@@ -127,7 +132,9 @@ const ModificarSolotexto = () => {
       return;
     }
 
+    setIsLoading(true)
     let response = await NoticiaService.modificarNoticiaPublicacion(id, duracion, titulo, contenido, categoriaId);
+    setIsLoading(false)
     if (response.success){
       setMsgAlert(response.message)
       setSeverityAlert("success")
@@ -144,6 +151,7 @@ const ModificarSolotexto = () => {
       <Grid sx={{width:"100%", mb:"1.5rem" }}>
         <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Modificar Noticia: Sólo texto</Typography>
       </Grid>
+      <CustomProgress open={isLoading} />
       <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>

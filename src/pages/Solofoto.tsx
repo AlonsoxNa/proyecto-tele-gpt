@@ -1,12 +1,10 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
+import React, { useState, useEffect, FormEvent } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from "@/Componentes/Navbar";
-import MediaUpload from "../Componentes/MediaUpload";
 import NoticiaService from "../services/Noticias";
 import CategoriaService from "@/services/CategoriaService";
 import { Grid, Typography } from "@mui/material";
 import CustomizedSnackbars from "@/components/shared/Snackbar";
+import { CustomProgress } from "@/components/shared/CustomProgress";
 
 const Solofoto = () => {
   const [titulo, setTitulo] = useState("");
@@ -15,7 +13,9 @@ const Solofoto = () => {
   const [extension, setExtension] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
   const [categorias, setCategorias] = useState([]);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<any>({});
+
+  const [ isLoading, setIsLoading ] = useState( true );
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
@@ -33,10 +33,12 @@ const Solofoto = () => {
       const response = await CategoriaService.obtenerCategorias()
       setCategorias(response);
     };
+    setIsLoading(true)
     fetchCategorias();
+    setIsLoading(false)
   }, []);
 
-  const validateField = (field, value) => {
+  const validateField = (field:any, value:any) => {
     let error = "";
     switch (field) {
       case "titulo":
@@ -76,19 +78,19 @@ const Solofoto = () => {
     setErrors(prevErrors => ({ ...prevErrors, [field]: error }));
   };
 
-  const handleTituloChange = (e) => {
+  const handleTituloChange = (e:any) => {
     const value = e.target.value;
     setTitulo(value);
     validateField("titulo", value);
   };
 
-  const handleDuracionChange = (e) => {
+  const handleDuracionChange = (e:any) => {
     const value = parseInt(e.target.value, 10);
     setDuracion(value);
     validateField("duracion", value);
   };
 
-  const handleImagenChange = (event) => {
+  const handleImagenChange = (event:any) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -102,7 +104,7 @@ const Solofoto = () => {
     }
   };
 
-  const handleCategoriaChange = (e) => {
+  const handleCategoriaChange = (e:any) => {
     const value = e.target.value;
     setCategoriaId(value);
     validateField("categoriaId", value);
@@ -127,7 +129,9 @@ const Solofoto = () => {
       return;
     }
     
+    setIsLoading(true)
     let response = await NoticiaService.registrarNoticiaFoto(duracion, titulo, tipo, multimedia, extension, categoriaId);
+    setIsLoading(false)
     if (response.success){
       setMsgAlert(response.message)
       setSeverityAlert("success")
@@ -144,6 +148,7 @@ const Solofoto = () => {
       <Grid sx={{width:"100%", mb:"1.5rem" }}>
         <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Registro Noticia: Sólo foto</Typography>
       </Grid>
+      <CustomProgress open={isLoading} />
       <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>
@@ -169,7 +174,7 @@ const Solofoto = () => {
                   onChange={handleCategoriaChange}
                 >
                   <option value="">Seleccione una categoría</option>
-                  {categorias.map((categoria) => (
+                  {categorias.map((categoria:any) => (
                     <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>
                   ))}
                 </select>

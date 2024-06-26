@@ -5,6 +5,7 @@ import { Grid, Typography } from "@mui/material";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import NoticiaService from "../services/Noticias";
+import { CustomProgress } from "@/components/shared/CustomProgress";
 
 
 const CrearAnuncio = () => {
@@ -16,6 +17,8 @@ const CrearAnuncio = () => {
   const [multimedia, setMultimedia] = useState("");
   const [extension, setExtension] = useState("");
   const [errors, setErrors] = useState<ErrorValidation>({});
+
+  const [ isLoading, setIsLoading ] = useState( true );
 
   const [msgAlert,setMsgAlert] = useState('')
   const [severityAlert,setSeverityAlert] = useState<'success'|'error'|'info'|'warning'>('success')
@@ -143,8 +146,9 @@ const CrearAnuncio = () => {
       setOpen(true)
       return;
     }
-
+    setIsLoading(true)
     const response = await NoticiaService.registrarNoticiaNormal(duracion, titulo, contenido, tipo, multimedia, extension, categoriaId);
+    setIsLoading(false)
     if (response.success){
       setMsgAlert(response.message)
       setSeverityAlert("success")
@@ -161,6 +165,7 @@ const CrearAnuncio = () => {
       <Grid sx={{width:"100%", mb:"1.5rem" }}>
         <Typography variant="h3" component="h3" sx={ { fontWeight: 700 } } textAlign="center">Registro Noticia: Normal</Typography>
       </Grid>
+      <CustomProgress open={isLoading} />
       <CustomizedSnackbars message={msgAlert} isOpen={open} handleClose={handleClose} severity={severityAlert}/>
       <div className="container mt-4">
         <form onSubmit={handleSubmit}>

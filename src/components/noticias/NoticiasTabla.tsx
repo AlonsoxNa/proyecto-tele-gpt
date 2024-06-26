@@ -14,6 +14,7 @@ import { convertirTipoNoticia } from '@/utils/noticias/convertirTipoNoticia';
 import { estilosTipoNoticia } from '@/assets/noticias/tipoNoticia';
 import { useNavigate } from 'react-router-dom';
 import AlertDialog from '../shared/AlertDialog';
+import { CustomProgress } from '../shared/CustomProgress';
 
 
 export const NoticiasTabla: FC = () => {
