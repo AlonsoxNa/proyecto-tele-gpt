@@ -124,7 +124,7 @@ const ModificarCategoria: React.FC = () => {
                                     value={nombre}
                                     onChange={handleNombreChange}
                                 />
-                                {errors.nombre && <div className="text-danger">{errors.nombre}</div>}
+                           
                             </div>
                         </div>
                     </div>

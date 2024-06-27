@@ -1,0 +1,9 @@
+
+services:
+  front:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "80:80"
+    restart: unless-stopped
