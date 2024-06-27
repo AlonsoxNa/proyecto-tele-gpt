@@ -18,6 +18,7 @@ import Solotexto from '../pages/Solotexto';
 import Solovideo from '../pages/Solovideo';
 import CrearCategoría from '@/pages/categoria/CrearCategoría';
 import GestionCategoria from '@/pages/categoria/GestionCategoria';
+import ModificarCategoria from "@/pages/categoria/ModificarCategoria.tsx";
 
 export const router = createBrowserRouter( [
   {
@@ -68,6 +69,9 @@ export const router = createBrowserRouter( [
       },{
         path: "gestion-categoria",
         element: <GestionCategoria />,
+      },{
+        path: "modificar-categoria",
+        element: <ModificarCategoria />,
       }
     ]
   },

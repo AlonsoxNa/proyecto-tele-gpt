@@ -8,7 +8,7 @@ const token = useUserStore.getState().user.token;
 const CategoriaService ={
     obtenerCategorias: async () => {
         try {
-            const response = await axios.get(`${API_URL}/categoria`, {
+            const response = await axios.get(`${API_URL}/categoria`,{
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -23,6 +23,25 @@ const CategoriaService ={
         } catch (error) {
             console.error('Error al obtener categorias', error);
             return [];
+        }
+    },
+    obtenerCategoriaPorId: async (id: string) => {
+        try {
+            const token = useUserStore.getState().user.token;
+            const response = await axios.get(`${API_URL}/categoria/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                console.error('No se encontró la categoría');
+                return null;
+            }
+        } catch (error) {
+            console.error('Error al obtener categoria por ID', error);
+            return null;
         }
     },
     registrarCategoria: async (nombre:string) => {
@@ -44,23 +63,22 @@ const CategoriaService ={
             return {success:false,message:'No se pudo registrar la categoría'};
         }
     },
-    modificarCategoria: async (nombre:string) => {
+    modificarCategoria: async (id: string, nombre: string) => {
         try {
-            const response = await axios.patch(`${API_URL}/categoria`,{
-                nombre:nombre
+            const response = await axios.patch(`${API_URL}/categoria/${id}`, {
+                nombre: nombre,
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (response.status === 200) {
-                return {success:true,message:'Categoria actualizada'};
-            }
-            else {
-                return {success:false,message:'No se pudo actualizar la categoría'};
+                return { success: true, message: 'Categoria actualizada', categoria: response.data };
+            } else {
+                return { success: false, message: 'No se pudo actualizar la categoría' };
             }
         } catch (error) {
-            return {success:false,message:'No se pudo actualizar la categoría'};
+            return { success: false, message: 'No se pudo actualizar la categoría' };
         }
     },
     eliminarCategoria: async (id:string) => {
